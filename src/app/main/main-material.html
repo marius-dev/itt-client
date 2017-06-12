@@ -1,0 +1,215 @@
+<div class="app" #root="$implicit" dir="ltr"
+     [ngClass]="{'app-dark': dark, 'boxed': boxed, 'collapsed-sidebar': collapseSidebar, 'compact-sidebar': compactSidebar, 'customizer-in': customizerIn}">
+  <md-sidenav-container class="app-container">
+    <md-sidenav #sidenav [mode]="sidenavMode" [opened]="sidenavOpen" class="sidebar-area">
+      <div class="sidebar-panel app-sidenav" fxLayout="column">
+        <md-toolbar class="sidebar-logo">
+          <div class="app-logo">
+            <div class="logo-sign inline-block"><img src="assets/img/logo-sign.png" width="30" height="30"></div>
+            <div class="logo-text inline-block"><img src="assets/img/logo-text.png" width="90" height="27"></div>
+          </div>
+        </md-toolbar>
+        <div class="sidebar-container">
+          <div class="app-user-thumb text-center">
+            <img class="img-responsive img-circle" src="assets/img/pro-thumb.jpg" width="107" height="107"
+                 alt="user list image">
+            <span class="app-user-name app-block">Marius Iliescu</span>
+          </div>
+          <div class="sidenav-scrollbar-container" fxLayout="column">
+            <perfect-scrollbar>
+              <md-nav-list fxLayout="column" menuToggleDirective class="navigation">
+                <md-list-item menuToggleLink *ngFor="let menuitem of menuItems.getAll()" group="{{menuitem.state}}">
+                  <a menuToggle class="app-relative" md-ripple [routerLink]="['/', menuitem.state]"
+                     routerLinkActive="active-link" *ngIf="menuitem.type === 'link'">
+                    <md-icon>{{ menuitem.icon }}</md-icon>
+                    <span>{{ menuitem.name | translate }}</span>
+                  </a>
+                  <a menuToggle class="app-relative" md-ripple href="javascript:;" *ngIf="menuitem.type === 'sub'">
+                    <md-icon>{{ menuitem.icon }}</md-icon>
+                    <span>{{ menuitem.name | translate }}</span>
+                    <span fxFlex></span>
+                    <md-icon class="menu-caret">chevron_right</md-icon>
+                  </a>
+                  <md-nav-list class="sub-menu" *ngIf="menuitem.type === 'sub'">
+                    <md-list-item *ngFor="let childitem of menuitem.children" routerLinkActive="open">
+                      <a [routerLink]="['/', menuitem.state, childitem.state ]" routerLinkActive="active-link"
+                         class="app-relative" md-ripple>{{ childitem.name | translate }}</a>
+                    </md-list-item>
+                  </md-nav-list>
+                </md-list-item>
+                <md-divider></md-divider>
+                <md-list-item>
+                  <a (click)="addMenuItem()">
+                    <md-icon>add</md-icon>
+                    <span>Add</span>
+                  </a>
+                </md-list-item>
+              </md-nav-list>
+            </perfect-scrollbar>
+          </div>
+        </div>
+      </div>
+    </md-sidenav>
+    <md-toolbar class="app-header-toolbar">
+      <div class="app-ham-icon">
+        <button class="" md-mini-fab color="primary" md-card-icon (click)="sidenav.toggle()">
+          <md-icon>menu</md-icon>
+        </button>
+      </div>
+      <a class="navbar-brand" href="#">{{header}}</a>
+      <app-breadcrumbs class="app-breadcrumbs"></app-breadcrumbs>
+      <span fxFlex></span>
+      <div class="search-bar" fxFlex>
+        <form class="search-form" fxShow="false" fxShow.gt-xs>
+          <md-input-container>
+            <input mdInput type="text" placeholder="Search"/>
+          </md-input-container>
+        </form>
+      </div>
+      <div class="secondary-menu">
+        <button fxHide="true" fxHide.gt-sm="false" md-button class="fullscreen-toggle" (click)="toggleFullscreen()">
+          <md-icon *ngIf="!isFullscreen">fullscreen</md-icon>
+          <md-icon *ngIf="isFullscreen">fullscreen_exit</md-icon>
+        </button>
+
+        <button class="user-button" md-button [mdMenuTriggerFor]="menu">
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <md-icon>account_circle</md-icon>
+          </div>
+        </button>
+        <button (click)="end.toggle()" md-icon-button class="ml-xs overflow-visible">
+          <md-icon>notifications</md-icon>
+        </button>
+        <button md-icon-button class="ml-xs overflow-visible" [mdMenuTriggerFor]="appsmenu">
+          <md-icon>apps</md-icon>
+        </button>
+      </div>
+    </md-toolbar>
+    <md-sidenav #end align="end" class="chat-panel" mode="over" opened="false">
+      <div class="scroll">
+        <md-toolbar class="mat-blue-800">
+          <h3>Notifications</h3>
+        </md-toolbar>
+        <md-nav-list>
+
+          <md-list-item>
+            <md-icon md-list-avatar class="mat-text-primary">person_add</md-icon>
+            <h4 md-line>New User</h4>
+            <p md-line>10 New Users Registered</p>
+          </md-list-item>
+          <md-list-item>
+            <md-icon md-list-avatar class="mat-text-primary">system_update</md-icon>
+            <h4 md-line>Updates</h4>
+            <p md-line>New Updates are available for Server</p>
+          </md-list-item>
+          <md-list-item>
+            <md-icon md-list-avatar class="mat-text-primary">info</md-icon>
+            <h4 md-line>Backup</h4>
+            <p md-line>Backup task is completed</p>
+          </md-list-item>
+
+          <md-list-item>
+            <md-icon md-list-avatar class="mat-text-primary">delete_sweep</md-icon>
+            <h4 md-line>Junk Files are deleted</h4>
+          </md-list-item>
+          <md-list-item>
+            <md-icon md-list-avatar class="mat-text-primary">check_circle</md-icon>
+            <h4 md-line>2 New project Completed</h4>
+          </md-list-item>
+          <md-list-item>
+            <md-icon md-list-avatar class="mat-text-warn">notifications_paused</md-icon>
+            <h4 md-line>Need 4 Data Entry Operator</h4>
+          </md-list-item>
+          <md-list-item>
+            <md-icon md-list-avatar class="mat-text-warn">error</md-icon>
+            <h4 md-line>Server 2 is down for 1 hour</h4>
+          </md-list-item>
+
+
+        </md-nav-list>
+      </div>
+    </md-sidenav>
+    <div class="app-base-container" #scrollContainer>
+      <div class="inner-container">
+        <router-outlet (activate)="onActivate($event, scrollContainer)"></router-outlet>
+      </div>
+    </div>
+  </md-sidenav-container>
+  <div class="app-customizer">
+    <button class="customizer-toggle" (click)="customizerFunction()">
+      <md-icon class="fa-spin">settings</md-icon>
+    </button>
+
+    <div class="settings-panel">
+      <md-toolbar color="primary">
+        <span fxFlex>Options</span>
+      </md-toolbar>
+      <md-card-content class="theme-options">
+        <h3>Layout Options</h3>
+        <md-divider></md-divider>
+        <div>
+          <md-checkbox [(ngModel)]="collapseSidebar" (change)="compactSidebar = false" [align]="end">Collapsed Sidebar
+          </md-checkbox>
+        </div>
+        <div class="boxed-layout-md">
+          <md-checkbox [(ngModel)]="boxed" [align]="end">Boxed Layout</md-checkbox>
+        </div>
+        <div>
+          <md-checkbox [(ngModel)]="dark" [align]="end">Dark Mode</md-checkbox>
+        </div>
+        <div>
+          <md-checkbox (change)="root.dir = (root.dir == 'rtl' ? 'ltr' : 'rtl')" [align]="end">RTL</md-checkbox>
+        </div>
+        <div>
+          <md-select placeholder="Language" class="mt-1" [(ngModel)]="currentLang" #langSelect="ngModel"
+                     (ngModelChange)="translate.use(currentLang)">
+            <md-option *ngFor="let lang of translate.getLangs()" [value]="lang">{{ lang }}</md-option>
+          </md-select>
+        </div>
+      </md-card-content>
+    </div>
+  </div>
+</div>
+
+<md-menu class="user-menu" x-position="before" y-position="below" #menu="mdMenu">
+  <button md-menu-item>
+    <md-icon>account_circle</md-icon>
+    <span>Profile</span>
+  </button>
+  <button md-menu-item>
+    <md-icon>settings</md-icon>
+    <span>Settings</span>
+  </button>
+  <button md-menu-item>
+    <md-icon>help</md-icon>
+    <span>Help</span>
+  </button>
+  <md-divider></md-divider>
+  <button [routerLink]="['/login']" md-menu-item>
+    <md-icon>exit_to_app</md-icon>
+    <span>Logout</span>
+  </button>
+</md-menu>
+
+<md-menu class="apps-menu" x-position="after" y-position="below" #appsmenu="mdMenu">
+  <button md-menu-item>
+    <md-icon>storage</md-icon>
+    <span>Total App Memory</span>
+  </button>
+  <button md-menu-item>
+    <md-icon>memory</md-icon>
+    <span>Total Memory Used</span>
+  </button>
+
+  <button md-menu-item>
+    <md-icon>mail</md-icon>
+    <span>12 Unread Mail</span>
+  </button>
+  <button md-menu-item>
+    <md-icon>feedback</md-icon>
+    <span>2 Feedback</span>
+  </button>
+
+</md-menu>
+
+
