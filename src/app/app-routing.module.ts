@@ -5,22 +5,34 @@ import {MainComponent} from './main/main.component';
 import {AdminComponent} from './admin/admin.component';
 import {LockScreenComponent} from './session/lockscreen/lockscreen.component';
 import {ForgotPasswordComponent} from './session/forgot-password/forgot-password.component';
-import {LoginComponent} from './session/login/login.component';
+import {LoginViewComponent} from './session/login-view/login-view.component';
+import {AuthGuard} from './security/auth/auth-guard';
+import {LoginComponent} from './security/auth/login/login.component';
+import {UserProfileComponent} from './security/users/user-profile/user-profile.component';
+import {UserCreateComponent} from './security/users/user-create/user-create.component';
+import {UserListComponent} from './security/users/user-list/user-list.component';
+
 
 const appRoutes: Routes = [
   {
-    path: 'session/login',
+    path: 'login',
     component: LoginComponent,
   }, {
-    path: 'session/forgot-password',
+    path: 'forgot-password',
     component: ForgotPasswordComponent,
   }, {
-    path: 'session/lockscreen',
+    path: 'lockscreen',
     component: LockScreenComponent,
   }, {
     path: '',
     component: MainComponent,
-    children: []
+    children: [
+      {path: 'profile', component: UserProfileComponent},
+      {path: 'forbidden', component: AdminComponent},
+      {path: 'users/add', component: UserCreateComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
+      {path: 'users/list', component: UserListComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
+    ],
+    canActivate: [AuthGuard]
   }
 ];
 

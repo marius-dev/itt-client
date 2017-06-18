@@ -11,9 +11,9 @@
         </md-toolbar>
         <div class="sidebar-container">
           <div class="app-user-thumb text-center">
-            <img class="img-responsive img-circle" src="assets/img/pro-thumb.jpg" width="107" height="107"
+            <img  class="img-responsive img-circle"[src]="data && data.image ? data.image :  'assets/img/pro-thumb.jpg'"  width="107" height="107"
                  alt="user list image">
-            <span class="app-user-name app-block">Marius Iliescu</span>
+            <span class="app-user-name app-block">{{user ? user.profile.displayName : 'Guest'}}</span>
           </div>
           <div class="sidenav-scrollbar-container" fxLayout="column">
             <perfect-scrollbar>
@@ -172,23 +172,15 @@
 </div>
 
 <md-menu class="user-menu" x-position="before" y-position="below" #menu="mdMenu">
-  <button md-menu-item>
+  <a md-menu-item [routerLink]="['/profile']" >
     <md-icon>account_circle</md-icon>
     <span>Profile</span>
-  </button>
-  <button md-menu-item>
-    <md-icon>settings</md-icon>
-    <span>Settings</span>
-  </button>
-  <button md-menu-item>
-    <md-icon>help</md-icon>
-    <span>Help</span>
-  </button>
+  </a>
   <md-divider></md-divider>
-  <button [routerLink]="['/login']" md-menu-item>
+  <a (click)="logout()" md-menu-item>
     <md-icon>exit_to_app</md-icon>
     <span>Logout</span>
-  </button>
+  </a>
 </md-menu>
 
 <md-menu class="apps-menu" x-position="after" y-position="below" #appsmenu="mdMenu">

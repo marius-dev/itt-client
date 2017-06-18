@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 export interface ChildrenItems {
   state: string;
@@ -16,10 +16,20 @@ export interface Menu {
 
 const MENUITEMS = [
   {
-    state: 'calendar',
-    name: 'CALENDAR',
+    state: 'users',
+    name: 'USERS',
+    type: 'sub',
+    icon: 'group',
+    children: [
+      {state: 'add', name: 'ADD_USER', icon: 'group add'},
+      {state: 'list', name: 'LIST_USERS', icon: 'list view'}
+    ]
+  },
+  {
+    state: 'inbox',
+    name: 'INBOX',
     type: 'link',
-    icon: 'date_range'
+    icon: 'mail'
   },
   {
     state: 'session',
@@ -41,6 +51,7 @@ export class MenuItems {
   getAll(): Menu[] {
     return MENUITEMS;
   }
+
   add(menu: Menu) {
     MENUITEMS.push(menu);
   }

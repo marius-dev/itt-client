@@ -1,0 +1,4 @@
+<div [fxLayout]="'row'" fxLayoutWrap>
+  <app-user [fxFlex] ="50"  *ngFor="let user of users | async"
+           [user]="user" (deleteUserEvent)="deleteUser($event)" ></app-user>
+</div>

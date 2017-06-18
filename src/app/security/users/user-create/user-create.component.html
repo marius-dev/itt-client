@@ -1,0 +1,84 @@
+<form  class="example-form" (ngSubmit)="onSubmit(userForm)" #userForm="ngForm" fxFlexFill fxLayoutAlign="center start">
+  <md-card fxFlex="80%">
+    <md-card-content  [fxLayout]="'column'">
+      <h3><fa [name]="'user'"></fa> Create User</h3>
+      <p [ngStyle]="{'color': 'red', 'font-size':'75%'}"
+         align="start">
+        {{error}}
+      </p>
+      <md-input-container >
+        <input name="email" #email="ngModel" mdInput id="email"
+               required
+               pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+               placeholder="Email"
+               [(ngModel)]="user.profile.email">
+        <md-hint
+          *ngIf="!email.pristine && email.errors?.required"
+          [ngStyle]="{'color': 'red'}"
+          align="start">
+          Email required
+        </md-hint>
+        <md-hint *ngIf="!email.pristine && email.errors?.pattern"
+                 [ngStyle]="{'color': 'red'}"
+                 align="start">
+          Email invalid
+        </md-hint>
+      </md-input-container>
+      <md-select placeholder="Role" [(ngModel)]="user.role" name="role">
+        <md-option *ngFor="let role of roles" [value]="role">
+          {{role.name}}
+        </md-option>
+      </md-select>
+      <md-input-container >
+        <input name="password" #password="ngModel" mdInput
+               type="password"
+               required
+               minlength="6"
+               placeholder="Password"
+               [(ngModel)]="user.password">
+        <md-hint
+          *ngIf="!password.pristine && password.errors?.required"
+          [ngStyle]="{'color': 'red'}"
+          align="start">
+          Password required
+        </md-hint>
+        <md-hint
+          *ngIf="!password.pristine && password.errors?.minlength"
+          [ngStyle]="{'color': 'red'}"
+          align="start">
+          Password to short (min. 6 characters)
+        </md-hint>
+      </md-input-container>
+      <md-input-container >
+        <input name="repeatPassword" #repeatPassword="ngModel"
+               mdInput
+               validateEqualTo="password"
+               type="password"
+               required
+               placeholder="Confirm Password"
+               [(ngModel)]="user.confirmPassword">
+      <md-hint
+          *ngIf="!repeatPassword.pristine && repeatPassword.errors?.required"
+          [ngStyle]="{'color': 'red'}"
+          align="start">
+          Confirmation of Password is required
+        </md-hint>
+        <md-hint
+          *ngIf="!repeatPassword.pristine && !repeatPassword.errors?.required && repeatPassword.errors?.validateEqual"
+          [ngStyle]="{'color': 'red'}"
+          align="start">
+          Password and Password Confirmation does not contain the same value
+        </md-hint>
+      </md-input-container>
+    </md-card-content>
+    <md-card-actions fxLayoutAlign="end"  [fxLayout]="'row'">
+
+      <div class="pad-wrap">
+        <md-card-actions>
+          <button md-raised-button color="primary" type="submit"  [disabled]="!userForm.form.valid">Submit</button>
+        </md-card-actions>
+      </div>
+
+    </md-card-actions>
+  </md-card>
+</form>

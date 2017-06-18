@@ -16,5 +16,9 @@
   "FORGOT": "Ai uitat parola?",
   "LOCKSCREEN": "Ecran blocat",
   "SUB MENU1": "Submeniu1",
-  "SUB MENU2": "Submeniu2"
+  "SUB MENU2": "Submeniu2",
+
+  "USERS": "Utilizatori",
+  "ADD_USER": "Adaugare utilizator",
+  "LIST_USERS": "Listare utilizatori"
 }

@@ -11,9 +11,6 @@ import { AppComponent } from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 import {AdminComponent} from './admin/admin.component';
 import {MainComponent} from './main/main.component';
-import {ForgotPasswordComponent} from './session/forgot-password/forgot-password.component';
-import {LockScreenComponent} from './session/lockscreen/lockscreen.component';
-import {LoginComponent} from './session/login/login.component';
 import {MaterialModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {PerfectScrollbarModule, PerfectScrollbarConfigInterface} from 'ngx-perfect-scrollbar';
@@ -25,6 +22,12 @@ import {MenuItems} from './core/menu/menu-items/menu-items';
 import {BreadcrumbService} from './core/breadcrumb/breadcrumb.service';
 import {PageTitleService} from './core/page-title/page-title.service';
 
+import {environment} from '../environments/environment';
+import {AngularFireModule} from 'angularfire2';
+import {AngularFireAuth} from 'angularfire2/auth';
+import {AngularFireDatabase} from 'angularfire2/database';
+import {Angular2FontawesomeModule} from 'angular2-fontawesome';
+import {AskForUserRemovalComponent} from './security/users/user/user.component';
 
 export function createTranslateLoader(http: Http) {
   return new TranslateStaticLoader(http, 'assets/i18n', '.json');
@@ -34,15 +37,15 @@ const perfectScrollbarConfig: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
 
+export const firebaseConfig = environment.firebaseConfig;
+
+
 
 @NgModule({
   declarations: [
     AppComponent,
     AdminComponent,
     MainComponent,
-    LoginComponent,
-    ForgotPasswordComponent,
-    LockScreenComponent,
     BreadcrumbsComponent
   ],
   imports: [
@@ -54,6 +57,7 @@ const perfectScrollbarConfig: PerfectScrollbarConfigInterface = {
     BrowserAnimationsModule,
     ReactiveFormsModule,
     MaterialModule,
+    Angular2FontawesomeModule,
     FlexLayoutModule,
     QuillModule,
     PerfectScrollbarModule.forRoot(perfectScrollbarConfig),
@@ -64,10 +68,15 @@ const perfectScrollbarConfig: PerfectScrollbarConfigInterface = {
       deps: [Http]
     })
   ],
+  entryComponents: [
+    AskForUserRemovalComponent
+  ],
   providers: [
     MenuItems,
     BreadcrumbService,
-    PageTitleService
+    PageTitleService,
+    AngularFireAuth,
+    AngularFireDatabase
   ],
   bootstrap: [AppComponent]
 })

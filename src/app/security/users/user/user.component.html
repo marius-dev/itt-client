@@ -1,0 +1,12 @@
+<md-card style="min-height: 8em">
+  <md-card-content [fxLayout]="'row'">
+    <div fxFlex="4em"><fa [name]="'user'" [size]=4></fa></div>
+    <div fxFlex>
+      <h4>{{user?.profile.email}}</h4>
+      <h6>{{user?.role.name}}</h6>
+    </div>
+    <div fxFlex="4em" [fxFlexAlign]="'end'" [fxLayout]="'column'">
+      <button class="mrgn-all-xs"  md-icon-button (click)="openDialog()"><md-icon>delete</md-icon></button>
+    </div>
+  </md-card-content>
+</md-card>

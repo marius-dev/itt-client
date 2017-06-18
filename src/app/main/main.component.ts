@@ -7,6 +7,9 @@ import {Router, NavigationEnd} from '@angular/router';
 import {Subscription} from 'rxjs/Subscription';
 import {MediaChange, ObservableMedia} from '@angular/flex-layout';
 import * as Ps from 'perfect-scrollbar';
+import {User} from '../security/users/user';
+import {AuthService} from '../security/auth/auth.service';
+import {UploadService} from '../security/storage/upload.service';
 
 
 const screenfull = require('screenfull');
@@ -38,6 +41,12 @@ export class MainComponent implements OnInit, OnDestroy {
   isMobile: boolean = false;
   isFullscreen: boolean = false;
 
+
+  user: User;
+  data: any;
+  logoutSub: Subscription;
+  currentUserSub: Subscription;
+
   private _routerEventsSubscription: Subscription;
 
   @ViewChild('sidenav') sidenav;
@@ -48,16 +57,19 @@ export class MainComponent implements OnInit, OnDestroy {
     private pageTitleService: PageTitleService,
     public translate: TranslateService,
     private router: Router,
-    private media: ObservableMedia
+    private media: ObservableMedia,
+    private auth: AuthService,
+    private uploadService: UploadService
   ) {
     const browserLang: string = translate.getBrowserLang();
     translate.use(browserLang.match(/en|ro/) ? browserLang : 'en');
 
     breadcrumbService.addFriendlyNameForRoute('/dashboard', 'Dashboard');
     breadcrumbService.addFriendlyNameForRoute('/session', 'Session');
-    breadcrumbService.addFriendlyNameForRoute('/session/login', 'Login');
-    breadcrumbService.addFriendlyNameForRoute('/session/forgot-password', 'Forgot');
-    breadcrumbService.addFriendlyNameForRoute('/session/lockscreen', 'Lock Screen');
+    breadcrumbService.addFriendlyNameForRoute('/login', 'Login');
+    breadcrumbService.addFriendlyNameForRoute('/forgot-password', 'Forgot');
+    breadcrumbService.addFriendlyNameForRoute('/lockscreen', 'Lock Screen');
+    breadcrumbService.addFriendlyNameForRoute('/profile', 'Profile');
   }
 
   ngOnInit() {
@@ -69,7 +81,15 @@ export class MainComponent implements OnInit, OnDestroy {
       this.url = event.url;
     });
 
-    if (this.url !== '/session/login' && this.url !== '/session/forgot-password' && this.url !== '/session/lockscreen') {
+
+    this.currentUserSub = this.auth.currentUser().subscribe(user => {
+      this.user = user;
+      this.uploadService.getProfileImage(user).subscribe(image => {
+        this.data = image;
+      });
+    });
+
+    if (this.url !== '/login' && this.url !== '/forgot-password' && this.url !== '/lockscreen') {
       const elemSidebar = <HTMLElement>document.querySelector('.sidebar-container ');
 
 
@@ -94,9 +114,23 @@ export class MainComponent implements OnInit, OnDestroy {
     });
   }
 
+  logout() {
+    this.logoutSub = this.auth.logout().subscribe(() => {
+      this.router.navigate(['/login']).then(() => {
+      });
+    });
+  }
+
   ngOnDestroy() {
     this._router.unsubscribe();
     this._mediaSubscription.unsubscribe();
+
+    if (this.logoutSub) {
+      this.logoutSub.unsubscribe();
+    }
+    if (this.currentUserSub) {
+      this.currentUserSub.unsubscribe();
+    }
   }
 
   menuMouseOver(): void {

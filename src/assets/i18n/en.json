@@ -1,7 +1,7 @@
 {
   "DASHBOARD": "Dashboard",
   "DASHBOARD 1": "Dashboard 1",
-  "DASHBOARD 2": "Dashboard 2",   
+  "DASHBOARD 2": "Dashboard 2",
   "INBOX": "Inbox",
   "CHAT": "Chat",
   "CALENDAR": "Calendar",
@@ -60,5 +60,10 @@
   "LOCKSCREEN": "Lockscreen",
   "GENE MENU": "App Menu",
   "SUB MENU1": "Sub Menu1",
-  "SUB MENU2": "Sub Menu2"
+  "SUB MENU2": "Sub Menu2",
+
+  "USERS": "Users",
+  "ADD_USER": "Add user",
+  "LIST_USERS": "List Users"
+
 }
