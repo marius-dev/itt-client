@@ -1,5 +1,3 @@
-
-
 <md-card class="mat-pad-none">
 
   <ng-template #loading>
@@ -10,63 +8,52 @@
     </div>
   </ng-template>
 
-
   <ng-template ngbModalContainer></ng-template>
-
 
   <ng-template #modalContent let-close="close">
     <div class="modal-header">
-      <h5 class="modal-title">Event action occurred</h5>
       <button color="primary" class="close" (click)="close()">
         <md-icon>close</md-icon>
       </button>
     </div>
     <div class="modal-body">
-      <div> Action: <pre>{{ modalData?.action }}</pre> </div>
-      <div> Event: <pre>{{ modalData?.event | json }}</pre> </div>
+        <pre>{{ modalData?.event.meta | json }}</pre>
     </div>
     <md-icon (click)="close()" class="modal-confirm-btn">done</md-icon>
   </ng-template>
 
-  <div class="text-center mat-blue-800 overflow-hidden">
-    <div class="cal-col">
-      <div class="app-btn-group">
-        <md-icon class="" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"> chevron_left
-        </md-icon>
-        <md-icon class="" mwlCalendarToday [(viewDate)]="viewDate"> today </md-icon>
-        <md-icon class="" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"> chevron_right
-        </md-icon>
-      </div>
-    </div>
-    <div class="cal-col">
-      <h3 class="app-cal-head">{{ viewDate | calendarDate:(view + 'ViewTitle'): getCurrntLang }}</h3>
-    </div>
-    <div class="right-tab cal-col">
-      <div class="app-btn-group">
-        <md-icon class="" (click)="view = 'week'" [class.active]="view === 'week'"> view_week </md-icon>
-        <md-icon class="" (click)="view = 'day'" [class.active]="view === 'day'"> view_day </md-icon>
-      </div>
-    </div>
-  </div>
+  <app-calendar-header
+    [(view)]="view"
+    [(viewDate)]="viewDate"
+    (viewDateChange)="fetchEvents()"
+    (viewChange)="fetchEvents()">
+  </app-calendar-header>
 
-  <br>
+  <div *ngIf="events$ | async; else loading; let events">
+    <div [ngSwitch]="view">
 
-  <div [ngSwitch]="view">
-    <mwl-calendar-week-view
-      *ngSwitchCase="'week'"
-      [viewDate]="viewDate"
-      [events]="events"
-      [refresh]="refresh"
-      (eventClicked)="handleEvent('Clicked', $event.event)"
-      (eventTimesChanged)="eventTimesChanged($event)">
-    </mwl-calendar-week-view>
-    <mwl-calendar-day-view
-      *ngSwitchCase="'day'"
-      [viewDate]="viewDate"
-      [events]="events"
-      [refresh]="refresh"
-      (eventClicked)="handleEvent('Clicked', $event.event)"
-      (eventTimesChanged)="eventTimesChanged($event)">
-    </mwl-calendar-day-view>
+      <mwl-calendar-week-view
+        *ngSwitchCase="'week'"
+        [viewDate]="viewDate"
+
+        [events]="events"
+        [locale]="getCurrntLang"
+        [refresh]="refresh"
+        [weekStartsOn]="weekStartsOn"
+        (eventClicked)="handleEvent('Clicked', $event.event)">
+      </mwl-calendar-week-view>
+      <mwl-calendar-day-view
+        *ngSwitchCase="'day'"
+        [viewDate]="viewDate"
+        [events]="events"
+        [hourSegments]="6"
+        [locale]="getCurrntLang"
+        [dayStartHour]="8"
+        [dayEndHour]="22"
+        [refresh]="refresh"
+        (eventClicked)="handleEvent('Clicked', $event.event)">
+      </mwl-calendar-day-view>
+
+    </div>
   </div>
 </md-card>

@@ -7,6 +7,8 @@ import {FormsModule} from '@angular/forms';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {Angular2FontawesomeModule} from 'angular2-fontawesome';
 import {CalendarModule} from 'angular-calendar';
+import {MetadataUtilService} from "./metadada-util.service";
+import { CalendarHeaderComponent } from './calendar-header/calendar-header.component';
 
 @NgModule({
   imports: [
@@ -18,6 +20,9 @@ import {CalendarModule} from 'angular-calendar';
     Angular2FontawesomeModule,
     CalendarModule.forRoot(),
   ],
-  declarations: [ActivityComponent]
+  declarations: [ActivityComponent, CalendarHeaderComponent],
+  providers:[
+    MetadataUtilService
+  ]
 })
 export class IttModule { }

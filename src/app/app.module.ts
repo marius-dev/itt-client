@@ -29,7 +29,7 @@ import {AngularFireDatabase} from 'angularfire2/database';
 import {Angular2FontawesomeModule} from 'angular2-fontawesome';
 import {AskForUserRemovalComponent} from './security/users/user/user.component';
 import {IttModule} from './itt/itt.module';
-import {ActivityManagerService} from './util/activity/activity-manager.service';
+import {ActivityManagerService} from './itt/activity/activity-manager.service';
 import {CalendarModule} from 'angular-calendar';
 
 export function createTranslateLoader(http: Http) {

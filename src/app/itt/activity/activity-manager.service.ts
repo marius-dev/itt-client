@@ -15,7 +15,9 @@ import {
   endOfMonth,
   isSameDay,
   isSameMonth,
-  addHours
+  addHours,
+  startOfWeek,
+  format
 } from 'date-fns';
 import {
   CalendarEvent,
@@ -23,22 +25,9 @@ import {
   CalendarEventTimesChangedEvent
 } from 'angular-calendar';
 import {TranslateService} from 'ng2-translate';
+import {MetadataUtilService} from "../metadada-util.service";
+import {throttle} from "rxjs/operator/throttle";
 
-
-const colors: any = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3'
-  },
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF'
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA'
-  }
-};
 
 @Injectable()
 export class ActivityManagerService {
@@ -47,6 +36,7 @@ export class ActivityManagerService {
 
   constructor(private http: Http,
               private authService: AuthService,
+              private metadataUtil: MetadataUtilService,
               private translate: TranslateService) {
     this.authService.currentUser().subscribe(user => {
       this.user = user;
@@ -73,7 +63,7 @@ export class ActivityManagerService {
       .then(
         res => {
           const student = res.json();
-          const dateAsString = date.getDay() + '-' + date.getMonth() + '-' + date.getFullYear();
+          const dateAsString = format(date, 'DD-MM-YYYY');
           return this.http
             .get(environment.coreIttUrl + '/' + activityRoutes.activityApi + '/student/' + student.id + '/' + dateAsString, options)
             .toPromise()
@@ -98,26 +88,68 @@ export class ActivityManagerService {
   }
 
   public activityToCalendarObject(serializedActivity, date: Date): CalendarEvent {
+    return this.teachingActivityToCalendarObject(serializedActivity, date);
+  }
+
+  public teachingActivityToCalendarObject(serializedActivity, date: Date): CalendarEvent {
     let startDate = date;
-    startDate.setHours(serializedActivity.hour, 0);
-    startDate = addDays(startDate, serializedActivity.day);
-    console.log(startDate);
+
+    startDate.setHours(serializedActivity.hour);
+    startDate = addDays(startDate, serializedActivity.day - 1);
+
     const endDate = addHours(startDate, serializedActivity.duration);
 
-    return {
+
+    // console.log(startDate);
+    // console.log(endDate);
+    // console.log(serializedActivity);
+
+    const activity = this.metadataUtil.serializedTeachingActivityToMetadata(serializedActivity);
+
+    const caledndarEvent = {
       start: startDate,
       end: endDate,
-      title: this.translate.instant(serializedActivity.activityCategory) + ' ' + this.translate.instant('at') + ' ' +
-      serializedActivity.subject.fullName + ' - ' +
-      serializedActivity.teacher.name + ' ' + serializedActivity.teacher.surname,
+      title: this.translate.instant(activity.activityCategory) + ' ' + this.translate.instant('at') + ' ' +
+      activity.subject.fullName + ' - ' +
+      activity.teacher.name + ' ' + activity.teacher.surname,
 
-      color: colors.yellow,
+      color: this.colorByActivityType(activity.activityCategory),
       resizable: {
         beforeStart: false,
         afterEnd: false
       },
-      draggable: false
+      draggable: false,
+      cssClass: 'event-view',
+      meta: activity
     };
+
+    //console.log(caledndarEvent);
+
+    return caledndarEvent;
   }
 
+  colorByActivityType(type: string) {
+    switch (type) {
+      case 'exam':
+        return {
+          primary: '#ad2121',
+          secondary: '#FAE3E3'
+        };
+      case 'course':
+        return {
+          primary: '#1e90ff',
+          secondary: '#D1E8FF'
+        };
+      case 'laboratory':
+        return {
+          primary: '#39ad0c',
+          secondary: '#75e95b'
+        };
+      default:
+        return {
+          primary: '#e3bc08',
+          secondary: '#FDF1BA'
+        };
+    }
+  }
 }

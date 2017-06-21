@@ -1,0 +1,33 @@
+<div class="text-center mat-blue-800 overflow-hidden">
+  <div class="cal-col">
+    <div class="app-btn-group">
+      <md-icon
+        class=""
+        mwlCalendarPreviousView
+        [view]="view"
+        [(viewDate)]="viewDate" (viewDateChange)="viewDateChange.next(viewDate)">
+        chevron_left
+      </md-icon>
+      <md-icon
+        class=""
+        mwlCalendarToday [(viewDate)]="viewDate" (viewDateChange)="viewDateChange.next(viewDate)">
+        today
+      </md-icon>
+      <md-icon
+        class=""
+        mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange.next(viewDate)">
+        chevron_right
+      </md-icon>
+    </div>
+  </div>
+  <div class="cal-col">
+    <h3 class="app-cal-head">{{ viewDate | calendarDate:(view + 'ViewTitle'): getCurrntLang }}</h3>
+  </div>
+  <div class="right-tab cal-col">
+    <div class="app-btn-group">
+      <md-icon class="" (click)="viewChange.emit('week')" [class.active]="view === 'week'"> view_week</md-icon>
+      <md-icon class="" (click)="viewChange.emit('day')" [class.active]="view === 'day'"> view_day</md-icon>
+    </div>
+  </div>
+</div>
+<br>
