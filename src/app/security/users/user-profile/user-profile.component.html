@@ -18,8 +18,7 @@
               type="button"
               (click)="changingImageClick()">Change Image</button>
           </div>
-          <div fxFlex="100"
-               [fxLayout]="'column'">
+          <div fxFlex="100" [fxLayout]="'column'">
             <p [ngStyle]="{'color': 'red', 'font-size':'75%'}" align="start">
                 {{error}}
             </p>
@@ -27,23 +26,29 @@
               <input mdInput
                      fxFlex="100"
                      minlength="3"
-                     placeholder="Display Name"
-                     [(ngModel)]="user.profile.displayName"
-                     name="displayName"
-                     #displayName="ngModel">
+                     placeholder="Name"
+                     [(ngModel)]="user.profile.name"
+                     name="name"
+                     #name="ngModel">
             </md-input-container>
+            <md-input-container>
+              <input mdInput
+                     fxFlex="100"
+                     minlength="3"
+                     placeholder="Surname"
+                     [(ngModel)]="user.profile.surname"
+                     name="surname"
+                     #surname="ngModel">
+            </md-input-container>
+            <button
+              fxLayoutAlign="start stretch"
+              md-button
+              type="submit"
+              [disabled]="!userProfileForm.form.valid">Save</button>
           </div>
         </div>
       </div>
-
     </md-card-content>
-    <md-card-actions fxLayoutAlign="end" [fxLayout]="'row'">
-      <div class="pad-wrap">
-        <md-card-actions>
-          <button md-raised-button color="primary" type="submit"  [disabled]="!userProfileForm.form.valid">Save</button>
-        </md-card-actions>
-      </div>
-    </md-card-actions>
   </md-card>
 </form>
 

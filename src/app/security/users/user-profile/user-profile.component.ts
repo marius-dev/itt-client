@@ -22,9 +22,6 @@ export class UserProfileComponent implements OnInit {
   initialProfile: Profile;
   user: User;
 
-
-  userDisplayName: string;
-
   error: string;
 
   constructor(private userService: UserService,
@@ -43,18 +40,15 @@ export class UserProfileComponent implements OnInit {
 
     this.data = {};
 
-    this.userDisplayName = '';
 
     this.changingImage = false;
     this.user = new User();
     this.user.profile = new Profile();
-    this.user.profile.displayName = '';
   }
 
   ngOnInit() {
     const sub = this.auth.currentUser().subscribe(user => {
       this.user = user;
-      this.userDisplayName = user.profile.displayName;
 
       this.uploadService.getProfileImage(user).subscribe(image => {
         this.data = image;
@@ -79,11 +73,10 @@ export class UserProfileComponent implements OnInit {
   }
 
   updateProfile() {
-    this.user.profile.displayName = this.userDisplayName;
     const sub = this.userService.updateUserProfile(this.user)
       .subscribe(user => {
           this.cloneInitial(user.profile);
-          this.updateValidationBar.open('User created');
+          this.updateValidationBar.open('User profile updated');
         },
         err => {
           this.error = err.message;
@@ -98,7 +91,8 @@ export class UserProfileComponent implements OnInit {
       return false;
     }
 
-    return this.user.profile.displayName !== this.initialProfile.displayName
+    return this.user.profile.name !== this.initialProfile.name
+      || this.user.profile.surname !== this.initialProfile.surname
       || this.user.profile.email !== this.initialProfile.email;
   }
 

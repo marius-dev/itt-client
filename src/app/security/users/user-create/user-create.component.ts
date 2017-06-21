@@ -7,6 +7,7 @@ import {Observable, Subscription} from 'rxjs';
 import {UserService} from '../user.service';
 import {AuthService} from '../../auth/auth.service';
 import {Profile} from '../profile';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-user-create',
@@ -16,8 +17,6 @@ import {Profile} from '../profile';
 export class UserCreateComponent implements OnInit, OnDestroy {
 
   @Input()
-  creatingUser: boolean;
-  @Input()
   user: User;
   @Input()
   error: string;
@@ -25,7 +24,7 @@ export class UserCreateComponent implements OnInit, OnDestroy {
   roles: Role[];
   sub: Subscription;
 
-  constructor(private rs: RoleService, private as: AuthService, private us: UserService) {
+  constructor(private rs: RoleService, private as: AuthService, private us: UserService, private router: Router) {
   }
 
   ngOnInit() {
@@ -61,6 +60,7 @@ export class UserCreateComponent implements OnInit, OnDestroy {
           this.error = null;
           // store to graph database
           this.user = new User();
+          this.router.navigate(['users/list']);
         },
         err => {
           this.error = err.message;

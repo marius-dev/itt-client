@@ -28,6 +28,9 @@ import {AngularFireAuth} from 'angularfire2/auth';
 import {AngularFireDatabase} from 'angularfire2/database';
 import {Angular2FontawesomeModule} from 'angular2-fontawesome';
 import {AskForUserRemovalComponent} from './security/users/user/user.component';
+import {IttModule} from './itt/itt.module';
+import {ActivityManagerService} from './util/activity/activity-manager.service';
+import {CalendarModule} from 'angular-calendar';
 
 export function createTranslateLoader(http: Http) {
   return new TranslateStaticLoader(http, 'assets/i18n', '.json');
@@ -49,6 +52,8 @@ export const firebaseConfig = environment.firebaseConfig;
     BreadcrumbsComponent
   ],
   imports: [
+    CalendarModule.forRoot(),
+    IttModule,
     BrowserModule,
     FormsModule,
     HttpModule,
@@ -76,7 +81,8 @@ export const firebaseConfig = environment.firebaseConfig;
     BreadcrumbService,
     PageTitleService,
     AngularFireAuth,
-    AngularFireDatabase
+    AngularFireDatabase,
+    ActivityManagerService
   ],
   bootstrap: [AppComponent]
 })

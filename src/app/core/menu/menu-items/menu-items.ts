@@ -26,10 +26,10 @@ const MENUITEMS = [
     ]
   },
   {
-    state: 'inbox',
-    name: 'INBOX',
+    state: 'activities',
+    name: 'ACTIVITIES',
     type: 'link',
-    icon: 'mail'
+    icon: 'calendar'
   },
   {
     state: 'session',

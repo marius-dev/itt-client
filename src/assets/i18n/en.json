@@ -64,6 +64,19 @@
 
   "USERS": "Users",
   "ADD_USER": "Add user",
-  "LIST_USERS": "List Users"
+  "LIST_USERS": "List Users",
 
+
+  "ACTIVITIES":"Activities",
+
+
+
+  "course": "Course",
+  "seminar": "Seminary",
+  "laboratory": "Laboratory",
+  "exam": "Exam",
+  "coloquim": "Coloquim",
+  "project": "Project presentation",
+  "at": "at",
+  "with": "with"
 }

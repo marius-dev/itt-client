@@ -24,7 +24,7 @@ export class MainComponent implements OnInit, OnDestroy {
 
   private _router: Subscription;
   header: string;
-  currentLang = 'en';
+  currentLang = 'ro';
   url: string;
   showSettings = false;
   dark: boolean;

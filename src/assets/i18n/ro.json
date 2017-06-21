@@ -20,5 +20,18 @@
 
   "USERS": "Utilizatori",
   "ADD_USER": "Adaugare utilizator",
-  "LIST_USERS": "Listare utilizatori"
+  "LIST_USERS": "Listare utilizatori",
+
+  "ACTIVITIES":"Activitati",
+
+
+
+  "course": "Curs",
+  "seminar": "Seminar",
+  "laboratory": "Laborator",
+  "exam": "Examen",
+  "coloquim": "Colocviu",
+  "project": "Prezentare proiect",
+  "at": "la",
+  "with": "cu"
 }

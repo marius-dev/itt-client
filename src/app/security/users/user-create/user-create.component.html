@@ -7,6 +7,49 @@
         {{error}}
       </p>
       <md-input-container >
+        <input name="name" #name="ngModel" mdInput
+               type="text"
+               required
+               minlength="3"
+               placeholder="Name"
+               [(ngModel)]="user.profile.name">
+        <md-hint
+          *ngIf="!name.pristine && name.errors?.required"
+          [ngStyle]="{'color': 'red'}"
+          align="start">
+          Name required
+        </md-hint>
+        <md-hint
+          *ngIf="!name.pristine && name.errors?.minlength"
+          [ngStyle]="{'color': 'red'}"
+          align="start">
+          Name should have at least 3 characters
+        </md-hint>
+      </md-input-container>
+
+      <md-input-container>
+        <input name="surname" #surname="ngModel" mdInput
+               type="text"
+               required
+               minlength="3"
+               placeholder="Surname"
+               [(ngModel)]="user.profile.surname">
+        <md-hint
+          *ngIf="!surname.pristine && surname.errors?.required"
+          [ngStyle]="{'color': 'red'}"
+          align="start">
+          Surname required
+        </md-hint>
+        <md-hint
+          *ngIf="!surname.pristine && surname.errors?.minlength"
+          [ngStyle]="{'color': 'red'}"
+          align="start">
+          Surname should have at least 3 characters
+        </md-hint>
+      </md-input-container>
+
+
+      <md-input-container >
         <input name="email" #email="ngModel" mdInput id="email"
                required
                pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"

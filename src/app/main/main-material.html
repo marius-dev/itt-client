@@ -13,7 +13,7 @@
           <div class="app-user-thumb text-center">
             <img  class="img-responsive img-circle"[src]="data && data.image ? data.image :  'assets/img/pro-thumb.jpg'"  width="107" height="107"
                  alt="user list image">
-            <span class="app-user-name app-block">{{user ? user.profile.displayName : 'Guest'}}</span>
+            <span class="app-user-name app-block">{{user ? user.profile.name + ' ' + user.profile.surname : 'Guest'}}</span>
           </div>
           <div class="sidenav-scrollbar-container" fxLayout="column">
             <perfect-scrollbar>

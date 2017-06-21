@@ -11,6 +11,7 @@ import {LoginComponent} from './security/auth/login/login.component';
 import {UserProfileComponent} from './security/users/user-profile/user-profile.component';
 import {UserCreateComponent} from './security/users/user-create/user-create.component';
 import {UserListComponent} from './security/users/user-list/user-list.component';
+import {ActivityComponent} from './itt/activity/activity.component';
 
 
 const appRoutes: Routes = [
@@ -31,6 +32,7 @@ const appRoutes: Routes = [
       {path: 'forbidden', component: AdminComponent},
       {path: 'users/add', component: UserCreateComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
       {path: 'users/list', component: UserListComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
+      {path: 'activities', component: ActivityComponent, canActivate: [AuthGuard], data: {roles: ['student', 'teacher']}},
     ],
     canActivate: [AuthGuard]
   }

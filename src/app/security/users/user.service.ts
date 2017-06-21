@@ -38,7 +38,9 @@ export class UserService {
         updatedUserData[`roles/${user.role.$key}/users/${fbAuth.uid}`] = true;
         updatedUserData[`users/${fbAuth.uid}`] = {
           profile: {
-            email: user.profile.email
+            email: user.profile.email,
+            name: user.profile.name,
+            surname: user.profile.surname
           },
           role: {
             id: user.role.$key,
@@ -66,8 +68,8 @@ export class UserService {
     if (user !== undefined &&
       user.$key !== undefined) {
       const dataToUpdate = {};
-      dataToUpdate[`users/${user.$key}/profile/displayName`] =
-        user.profile.displayName;
+      dataToUpdate[`users/${user.$key}/profile/name`] = user.profile.name;
+      dataToUpdate[`users/${user.$key}/profile/surname`] = user.profile.surname;
       // dataToUpdate[`users/${user.$key}/profile/email`] = user.profile.email;
       this.afDatabase.object('/')
         .update(dataToUpdate)
@@ -97,7 +99,7 @@ export class UserService {
           resultSubject.error(err);
         });
     }
-    
+
     return resultSubject;
   }
 }

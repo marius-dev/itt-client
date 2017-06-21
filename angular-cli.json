@@ -20,6 +20,7 @@
       "styles": [
         "assets/scss/style.scss",
         "../node_modules/quill/dist/quill.snow.css",
+        "../node_modules/angular-calendar/dist/css/angular-calendar.css",
         "../node_modules/nvd3/build/nv.d3.css",
         "assets/fonts/data-table/icons.css"
       ],
