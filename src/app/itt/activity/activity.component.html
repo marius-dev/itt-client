@@ -1,59 +1,108 @@
-<md-card class="mat-pad-none">
+<!--<md-sidenav-container class="app-container">-->
+  <md-card class="mat-pad-none">
 
-  <ng-template #loading>
-    <div class="text-center">
-      <i class="fa fa-spin fa-spinner fa-5x"></i>
-      <br>
-      Loading events...
-    </div>
-  </ng-template>
+    <ng-template #loading>
+      <div class="text-center">
+        <i class="fa fa-spin fa-spinner fa-5x"></i>
+        <br>
+        Loading events...
+      </div>
+    </ng-template>
 
-  <ng-template ngbModalContainer></ng-template>
+    <ng-template ngbModalContainer></ng-template>
 
-  <ng-template #modalContent let-close="close">
-    <div class="modal-header">
-      <button color="primary" class="close" (click)="close()">
-        <md-icon>close</md-icon>
-      </button>
-    </div>
-    <div class="modal-body">
+    <ng-template #modalContent let-close="close">
+      <div class="modal-header">
+        <button color="primary" class="close" (click)="close()">
+          <md-icon>close</md-icon>
+        </button>
+      </div>
+      <div class="modal-body">
         <pre>{{ modalData?.event.meta | json }}</pre>
+      </div>
+      <md-icon (click)="close()" class="modal-confirm-btn">done</md-icon>
+    </ng-template>
+
+    <app-calendar-header
+      [(view)]="view"
+      [(viewDate)]="viewDate"
+      (viewDateChange)="fetchEvents()"
+      (viewChange)="fetchEvents()">
+    </app-calendar-header>
+
+    <div *ngIf="events$ | async; else loading; let events">
+      <div [ngSwitch]="view">
+
+        <mwl-calendar-week-view
+          *ngSwitchCase="'week'"
+          [viewDate]="viewDate"
+          [events]="events"
+          [locale]="getCurrntLang"
+          [refresh]="refresh"
+          [weekStartsOn]="weekStartsOn"
+          (eventClicked)="handleEvent('Clicked', $event.event)">
+        </mwl-calendar-week-view>
+        <mwl-calendar-day-view
+          *ngSwitchCase="'day'"
+          [viewDate]="viewDate"
+          [events]="events"
+          [hourSegments]="6"
+          [locale]="getCurrntLang"
+          [dayStartHour]="8"
+          [dayEndHour]="22"
+          [refresh]="refresh"
+          (eventClicked)="handleEvent('Clicked', $event.event)">
+        </mwl-calendar-day-view>
+
+      </div>
     </div>
-    <md-icon (click)="close()" class="modal-confirm-btn">done</md-icon>
-  </ng-template>
+  </md-card>
 
-  <app-calendar-header
-    [(view)]="view"
-    [(viewDate)]="viewDate"
-    (viewDateChange)="fetchEvents()"
-    (viewChange)="fetchEvents()">
-  </app-calendar-header>
+  <!--<button (click)="actDetails.toggle()">dsdf</button>-->
 
-  <div *ngIf="events$ | async; else loading; let events">
-    <div [ngSwitch]="view">
 
-      <mwl-calendar-week-view
-        *ngSwitchCase="'week'"
-        [viewDate]="viewDate"
+  <!--<md-sidenav #actDetails align="end" class="chat-panel" mode="over" opened="false">-->
+    <!--<div class="scroll">-->
+      <!--<md-toolbar class="mat-blue-800">-->
+        <!--<h3>Activity</h3>-->
+      <!--</md-toolbar>-->
+      <!--<md-nav-list>-->
 
-        [events]="events"
-        [locale]="getCurrntLang"
-        [refresh]="refresh"
-        [weekStartsOn]="weekStartsOn"
-        (eventClicked)="handleEvent('Clicked', $event.event)">
-      </mwl-calendar-week-view>
-      <mwl-calendar-day-view
-        *ngSwitchCase="'day'"
-        [viewDate]="viewDate"
-        [events]="events"
-        [hourSegments]="6"
-        [locale]="getCurrntLang"
-        [dayStartHour]="8"
-        [dayEndHour]="22"
-        [refresh]="refresh"
-        (eventClicked)="handleEvent('Clicked', $event.event)">
-      </mwl-calendar-day-view>
+        <!--<md-list-item>-->
+          <!--<md-icon md-list-avatar class="mat-text-primary">person_add</md-icon>-->
+          <!--<h4 md-line>New User</h4>-->
+          <!--<p md-line>10 New Users Registered</p>-->
+        <!--</md-list-item>-->
+        <!--<md-list-item>-->
+          <!--<md-icon md-list-avatar class="mat-text-primary">system_update</md-icon>-->
+          <!--<h4 md-line>Updates</h4>-->
+          <!--<p md-line>New Updates are available for Server</p>-->
+        <!--</md-list-item>-->
+        <!--<md-list-item>-->
+          <!--<md-icon md-list-avatar class="mat-text-primary">info</md-icon>-->
+          <!--<h4 md-line>Backup</h4>-->
+          <!--<p md-line>Backup task is completed</p>-->
+        <!--</md-list-item>-->
 
-    </div>
-  </div>
-</md-card>
+        <!--<md-list-item>-->
+          <!--<md-icon md-list-avatar class="mat-text-primary">delete_sweep</md-icon>-->
+          <!--<h4 md-line>Junk Files are deleted</h4>-->
+        <!--</md-list-item>-->
+        <!--<md-list-item>-->
+          <!--<md-icon md-list-avatar class="mat-text-primary">check_circle</md-icon>-->
+          <!--<h4 md-line>2 New project Completed</h4>-->
+        <!--</md-list-item>-->
+        <!--<md-list-item>-->
+          <!--<md-icon md-list-avatar class="mat-text-warn">notifications_paused</md-icon>-->
+          <!--<h4 md-line>Need 4 Data Entry Operator</h4>-->
+        <!--</md-list-item>-->
+        <!--<md-list-item>-->
+          <!--<md-icon md-list-avatar class="mat-text-warn">error</md-icon>-->
+          <!--<h4 md-line>Server 2 is down for 1 hour</h4>-->
+        <!--</md-list-item>-->
+
+
+      <!--</md-nav-list>-->
+    <!--</div>-->
+  <!--</md-sidenav>-->
+<!--</md-sidenav-container>-->

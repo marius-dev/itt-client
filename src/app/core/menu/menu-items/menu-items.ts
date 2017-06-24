@@ -29,7 +29,7 @@ const MENUITEMS = [
     state: 'activities',
     name: 'ACTIVITIES',
     type: 'link',
-    icon: 'calendar'
+    icon: 'date_range'
   },
   {
     state: 'session',

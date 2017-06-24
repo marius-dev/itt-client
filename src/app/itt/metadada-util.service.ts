@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {TeachingActivity, Teacher, Semester, Subject, Participant} from "./calendar-metadata";
-import {forEach} from "@angular/router/src/utils/collection";
+import {TeachingActivity, Teacher, Semester, Subject, Participant, Location} from './calendar-metadata';
+
 
 @Injectable()
 export class MetadataUtilService {
@@ -12,12 +12,14 @@ export class MetadataUtilService {
   serializedTeachingActivityToMetadata(serializedTeachingActivity): TeachingActivity {
     const activity = new TeachingActivity();
 
+
     activity.id = serializedTeachingActivity.id;
     activity.duration = serializedTeachingActivity.duration;
     activity.hour = serializedTeachingActivity.hour;
     activity.day = serializedTeachingActivity.day;
     activity.weekType = serializedTeachingActivity.weekType;
     activity.activityCategory = serializedTeachingActivity.activityCategory;
+    activity.location = this.serializedLocationToMetadata(serializedTeachingActivity.location);
     activity.teacher = this.serializedTeacherToMetadata(serializedTeachingActivity.teacher);
     activity.subject = this.serializedSubjectToMetadata(serializedTeachingActivity.subject);
     activity.semester = this.serializedSemesterToMetadata(serializedTeachingActivity.semester);
@@ -36,6 +38,15 @@ export class MetadataUtilService {
     teacher.email = serializedTeacher.email;
 
     return teacher;
+  }
+
+  serializedLocationToMetadata(serializedLocation): Location {
+    const location = new Location();
+    location.id = serializedLocation.id;
+    location.fullName = serializedLocation.fullName;
+    location.shortName = serializedLocation.shortName;
+
+    return location;
   }
 
   serializedSemesterToMetadata(serielizedSemester): Semester {

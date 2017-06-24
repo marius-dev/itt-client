@@ -1,6 +1,3 @@
-/**
- * Created by ilies on 21-Jun-17.
- */
 
 export class TeachingActivity {
   id: number;
@@ -11,6 +8,7 @@ export class TeachingActivity {
   day: number;
 
   semester: Semester;
+  location: Location;
   teacher: Teacher;
   subject: Subject;
   participants: Participant[];
@@ -44,3 +42,23 @@ export class Participant {
   yearOfStudy: number;
   type: string;
 }
+
+export class Specialization {
+  id: number;
+  identifier: string;
+  fullName: string;
+  shortName: string;
+  specializationCategory: string;
+
+
+  constructor(fullName: string) {
+    this.fullName = fullName;
+  }
+}
+
+export class Location {
+  id: number;
+  fullName: string;
+  shortName: string;
+}
+

@@ -19,7 +19,6 @@ export class UploadService {
     const path = `/profile/${user.$key}`;
     const iRef = storageRef.child(path);
     iRef.putString(img, 'base64', {contentType: 'image/png'}).then((snapshot) => {
-      console.log('Uploaded a blob or file! Now storing the reference at', `/profile/images/`);
       this.afDatabase.object(`users/${user.$key}/profile/image`).update({path: path, filename: user.$key});
     });
   }
@@ -31,13 +30,10 @@ export class UploadService {
     if (user != null) {
       this.afDatabase.object(`users/${user.$key}/profile/image`)
         .subscribe(image => {
-          console.log('image', image);
           if (image.path != null) {
-            console.log('one', image);
             const pathReference = storage.ref(image.path);
             pathReference.getDownloadURL().then(url => {
               const result = {image: url, path: image.path, filename: image.filename};
-              console.log('two', result);
               resultSubject.next(result);
               // this.profileImage = result;
             });

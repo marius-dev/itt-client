@@ -1,0 +1,116 @@
+<md-card>
+  <div class="app-card-title">
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxLayout="column">
+        <h3>{{'EDIT_ACTIVITY_LABEL' | translate}}</h3>
+      </div>
+      <span fxFlex></span>
+      <button md-icon-button (click)="restoreModel()">
+        <md-icon>sync</md-icon>
+      </button>
+    </div>
+  </div>
+  <div class="app-card-content">
+    <br>
+    <form class="filter app-filter-row" #filterForm="ngForm">
+      <div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign="space-between center">
+        <div fxFlex.gt-sm="33" fxFlex.gt-xs="33" fxFlex="100">
+          <md-select name="teacher" (change)="updateChanges()" placeholder="{{'TEACHER_PLACEHOLDER' | translate }}"
+                     [(ngModel)]="tmpActivity.teacher.id" required="true" fxFlex="100">
+            <md-option *ngFor="let teacher of allTeachers | async" [value]="teacher?.id">
+              {{ teacher?.name }} {{ teacher?.surname }}
+            </md-option>
+          </md-select>
+        </div>
+        <div fxFlex.gt-sm="33" fxFlex.gt-xs="33" fxFlex="100">
+          <md-select name="location" (change)="updateChanges()" placeholder="{{'LOCATION_PLACEHOLDER' | translate }}"
+                     [(ngModel)]="tmpActivity.location.id" required="true" fxFlex="100">
+            <md-option *ngFor="let location of allRooms | async" [value]="location?.id">
+              {{ location?.fullName }}
+            </md-option>
+          </md-select>
+        </div>
+        <div fxFlex.gt-sm="33" fxFlex.gt-xs="33" fxFlex="100">
+          <md-select name="activity-type" (change)="updateChanges()"
+                     placeholder="{{'ACTIVITY_TYPE_PLACEHOLDER' | translate }}"
+                     [(ngModel)]="tmpActivity.activityCategory"
+                     required="true" fxFlex="100">
+            <md-option *ngFor="let actType of allActivityTypes | async" [value]="actType">
+              {{ actType | translate }}
+            </md-option>
+          </md-select>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign="space-between center">
+        <div fxFlex.gt-sm="24" fxFlex.gt-xs="24" fxFlex="100">
+          <md-input-container fxFlex="100">
+            <input name="day-in-week" (change)="updateChanges()" mdInput
+                   placeholder="{{'DAY_IN_WEEK_PLACEHOLDER' | translate }}" type="number" min="1" max="7"
+                   [(ngModel)]="tmpActivity.day" required>
+          </md-input-container>
+        </div>
+        <div fxFlex.gt-sm="24" fxFlex.gt-xs="24" fxFlex="100">
+          <md-input-container fxFlex="100">
+            <input name="hour" (change)="updateChanges()" mdInput placeholder="{{'HOUR_PLACEHOLDER' | translate }}"
+                   type="number" min="8" max="20" [(ngModel)]="tmpActivity.hour" required fxFlex="100">
+          </md-input-container>
+        </div>
+        <div fxFlex.gt-sm="24" fxFlex.gt-xs="24" fxFlex="100">
+          <md-input-container fxFlex="100">
+            <input name="duration" (change)="updateChanges()" mdInput
+                   placeholder="{{'ACTIVITY_DURATION_PLACEHOLDER' | translate }}" fxFlex="100" type="number" min="1"
+                   max="20" [(ngModel)]="tmpActivity.duration" required>
+          </md-input-container>
+        </div>
+        <div fxFlex.gt-sm="24" fxFlex.gt-xs="24" fxFlex="100">
+          <md-select name="week-type" (change)="updateChanges()" placeholder="{{'WEEK_TYPE_PLACEHOLDER' | translate }}"
+                     fxFlex="100" [(ngModel)]="tmpActivity.weekType" required="true">
+            <md-option *ngFor="let weekType of allWeekTypes" [value]="weekType">
+              {{ weekType + '-WEEK' | translate }}
+            </md-option>
+          </md-select>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign="space-between center">
+        <div fxFlex.gt-sm="10" fxFlex.gt-xs="10" fxFlex="100">
+          <md-select name="semester" (change)="updateChanges()"
+                     placeholder="{{'SEMESTER_PLACEHOLDER' | translate }}" [(ngModel)]="tmpActivity.semester.number"
+                     required="true" fxFlex="100">
+            <md-option *ngFor="let semester of allSemesterOptions" [value]="semester">
+              {{ semester }}
+            </md-option>
+          </md-select>
+        </div>
+        <div fxFlex.gt-sm="30" fxFlex.gt-xs="30" fxFlex="100">
+          <md-select name="academic-year" (change)="updateChanges()"
+                     placeholder="{{'ACADEMIC_YEAR_PLACEHOLDER' | translate }}" [(ngModel)]="tmpActivity.semester.academicYear"
+                     required="true" fxFlex="100">
+            <md-option *ngFor="let academicYear of allAcademicYears | async" [value]="academicYear?.name">
+              {{ academicYear?.name }}
+            </md-option>
+          </md-select>
+        </div>
+        <div fxFlex.gt-sm="57" fxFlex.gt-xs="57" fxFlex="100">
+          <md-select multiple name="participants" (change)="updateChanges()"
+                     placeholder="{{'PARTICIPANTS_PLACEHOLDER' | translate }}" [(ngModel)]="participantsId"
+                     required="true" fxFlex="100">
+            <md-option *ngFor="let participant of allParticipants | async" [value]="participant.id">
+              {{ participant.identifier }}
+            </md-option>
+          </md-select>
+        </div>
+      </div>
+
+      <div class="pad-wrap">
+        <md-card-actions>
+          <button md-raised-button (click)="sendChanges()" color="primary" type="button"
+                  [disabled]="((!filterForm.valid) || (changes.length === 0))">Submit
+          </button>
+        </md-card-actions>
+      </div>
+
+    </form>
+  </div>
+</md-card>
+
+

@@ -12,7 +12,8 @@ import {UserProfileComponent} from './security/users/user-profile/user-profile.c
 import {UserCreateComponent} from './security/users/user-create/user-create.component';
 import {UserListComponent} from './security/users/user-list/user-list.component';
 import {ActivityComponent} from './itt/activity/activity.component';
-
+import {TeachingActivityListComponent} from './admin/teaching-activity-list/teaching-activity-list.component';
+import {TeachingActivityComponent} from './admin/teaching-activity/teaching-activity.component';
 
 const appRoutes: Routes = [
   {
@@ -28,13 +29,14 @@ const appRoutes: Routes = [
     path: '',
     component: MainComponent,
     children: [
+      {path: '', component: TeachingActivityListComponent},
+      {path: 'teaching-activity/:id', component: TeachingActivityComponent },
       {path: 'profile', component: UserProfileComponent},
       {path: 'forbidden', component: AdminComponent},
       {path: 'users/add', component: UserCreateComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
       {path: 'users/list', component: UserListComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
       {path: 'activities', component: ActivityComponent, canActivate: [AuthGuard], data: {roles: ['student', 'teacher']}},
-    ],
-    canActivate: [AuthGuard]
+    ]
   }
 ];
 

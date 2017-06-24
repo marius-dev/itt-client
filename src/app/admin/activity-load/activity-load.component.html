@@ -1,0 +1,102 @@
+
+
+
+
+<!--Predare-->
+<div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign=" start" class="app-file-upload">
+  <md-card fxFlex="100%">
+    <div class="app-card-title">
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <div fxLayout="column">
+          <h4></h4>
+        </div> <span fxFlex></span> </div>
+      <md-divider></md-divider>
+    </div>
+    <div class="app-card-content">
+
+      <div  fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign="start">
+        <div fxFlex.gt-sm="20" fxFlex.gt-xs="50" fxFlex="100"  class="pr-1">
+          <h6>Select files</h6>
+          <div class="file-type" ng2FileDrop
+               [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+               (fileOver)="fileOverBase($event)"
+               [uploader]="uploader">Base drop zone</div>
+
+          <div class="file-type" ng2FileDrop
+               [ngClass]="{'another-file-over-class': hasAnotherDropZoneOver}"
+               (fileOver)="fileOverAnother($event)"
+               [uploader]="uploader">Another drop zone</div>
+
+          <p>Multiple</p>
+          <input class="mrgn-b-md" type="file" ng2FileSelect [uploader]="uploader" multiple  /><br/>
+
+          <div class="clearfix"></div>
+
+          <p>Single</p>
+          <input type="file" ng2FileSelect [uploader]="uploader" />
+        </div>
+        <div fxFlex.gt-sm="80" fxFlex.gt-xs="50" fxFlex="100">
+          <div class="pad-wrap">
+
+            <h6  fxLayout="row">
+              <span fxFlex>Upload queue</span>
+              <span>Queue length: {{ uploader?.queue?.length }}</span>
+            </h6>
+
+            <ngx-datatable
+              class="material ml-0 mr-0 mrgn-b-md"
+              [rows]="uploader.queue"
+              [columnMode]="'flex'"
+              [headerHeight]="50"
+              [footerHeight]="0"
+              [rowHeight]="'auto'">
+              <ngx-datatable-column name="Name" [flexGrow]="2">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row?.file?.name }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Size" *ngIf="uploader.options.isHTML5" [flexGrow]="1">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row?.file?.size/1024/1024 | number:'.2' }} MB
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Progress" *ngIf="uploader.options.isHTML5" [flexGrow]="1">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  <md-progress-bar mode="determinate" value="{{row.progress}}"></md-progress-bar>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Status" [flexGrow]="1">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  <span *ngIf="row.isSuccess"><md-icon>check</md-icon></span>
+                  <span *ngIf="row.isCancel"><md-icon>cancel</md-icon></span>
+                  <span *ngIf="row.isError"><md-icon>delete</md-icon></span>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Action" [flexGrow]="2">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  <button md-raised-button md-button-sm  type="button"
+                          (click)="row.upload()" [disabled]="row.isReady || row.isUploading || row.isSuccess">Upload</button>
+                  <button md-raised-button md-button-sm  type="button"
+                          (click)="row.cancel()" [disabled]="!row.isUploading">Cancel</button>
+                  <button md-raised-button md-button-sm  type="button"
+                          (click)="row.remove()">Remove
+                  </button>
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+
+            <div class="mrgn-b-md">
+              <p>Queue progress:</p>
+              <md-progress-bar mode="determinate" value="{{uploader.progress}}"></md-progress-bar>
+            </div>
+            <button md-raised-button md-button-sm  type="button"
+                    (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">Upload all</button>
+            <button md-raised-button md-button-sm  type="button"
+                    (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">Cancel all</button>
+            <button md-raised-button md-button-sm  type="button"
+                    (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">Remove all</button>
+          </div></div>
+      </div>
+    </div>
+  </md-card>
+</div>

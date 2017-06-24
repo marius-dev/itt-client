@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers, RequestOptions} from '@angular/http';
 import {environment} from '../../../environments/environment';
-import {activityRoutes} from '../../external-api-routes';
+import {activityRoutes, locationRoute, participantRoute, teacherRoutes} from '../../external-api-routes';
 import {studentRoutes} from '../../external-api-routes';
 import {UserService} from '../../security/users/user.service';
 import {AuthService} from '../../security/auth/auth.service';
@@ -25,8 +25,8 @@ import {
   CalendarEventTimesChangedEvent
 } from 'angular-calendar';
 import {TranslateService} from 'ng2-translate';
-import {MetadataUtilService} from "../metadada-util.service";
-import {throttle} from "rxjs/operator/throttle";
+import {MetadataUtilService} from '../metadada-util.service';
+import {throttle} from 'rxjs/operator/throttle';
 
 
 @Injectable()
@@ -50,6 +50,75 @@ export class ActivityManagerService {
     console.error('An error occurred', error); // for demo purposes only
     return Promise.reject(error.message || error);
   }
+
+  public getAllLocations() {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const options = new RequestOptions({headers: headers});
+
+    return this.http
+      .get(environment.coreIttUrl + '/' + locationRoute + '/', options)
+      .toPromise()
+      .catch(err => {
+        return this.handleError(err);
+      });
+
+  }
+
+  public getAllTeachers() {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const options = new RequestOptions({headers: headers});
+
+    return this.http
+      .get(environment.coreIttUrl + '/' + teacherRoutes + '/', options)
+      .toPromise()
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  public getAllParticipants() {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const options = new RequestOptions({headers: headers});
+
+    return this.http
+      .get(environment.coreIttUrl + '/' + participantRoute + '/', options)
+      .toPromise()
+      .catch(err => {
+        return this.handleError(err);
+      });
+
+  }
+
+  public getAllTeachingActivityTypes() {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const options = new RequestOptions({headers: headers});
+
+    return this.http
+      .get(environment.coreIttUrl + '/' + activityRoutes.teachingActivityApi + '/all-types', options)
+      .toPromise()
+      .catch(err => {
+        return this.handleError(err);
+      });
+
+  }
+
+  public updateTeachingActivity(activityId, changes): Observable<any> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const options = new RequestOptions({headers: headers});
+
+    return this.http
+      .put(environment.coreIttUrl + '/' + activityRoutes.teachingActivityApi + '/' + activityId, JSON.stringify(changes), options);
+   }
 
   public getActivitiesOnDate(date: Date): Promise<any> {
     const headers = new Headers();
@@ -77,6 +146,34 @@ export class ActivityManagerService {
       });
   }
 
+  public getAllActivitiesBySemesterAndSpecialization(academicYear: string, semesterNumber: number, specializationId: number): Promise<any> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const options = new RequestOptions({headers: headers});
+
+    return this.http
+      .get(environment.coreIttUrl + '/' + activityRoutes.teachingActivityApi + '/all/' + academicYear + '/' + semesterNumber + '/' + specializationId, options)
+      .toPromise()
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  public getActivityById(activityId: number): Promise<any> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const options = new RequestOptions({headers: headers});
+
+    return this.http
+      .get(environment.coreIttUrl + '/' + activityRoutes.activityApi + '/' + activityId, options)
+      .toPromise()
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
   public activitiesToCalendarObjects(serializedActivities, date: Date) {
     let events: CalendarEvent[];
 
@@ -88,7 +185,37 @@ export class ActivityManagerService {
   }
 
   public activityToCalendarObject(serializedActivity, date: Date): CalendarEvent {
-    return this.teachingActivityToCalendarObject(serializedActivity, date);
+    if (serializedActivity.activityCategory === 'practice') {
+      return this.practiceActivityToCalendarObject(serializedActivity);
+    } else {
+      return this.teachingActivityToCalendarObject(serializedActivity, date);
+    }
+  }
+
+  public practiceActivityToCalendarObject(serializedActivity): CalendarEvent {
+
+    console.log(serializedActivity.period.startDate);
+
+    const startDate = new Date(serializedActivity.period.startDate);
+    const endDate = new Date(serializedActivity.period.endDate);
+
+    console.log(startDate);
+    console.log(endDate);
+
+    const caledndarEvent = {
+      start: startDate,
+      end: endDate,
+      title: serializedActivity.activityName,
+      color: this.colorByActivityType(serializedActivity.activityCategory),
+      resizable: {
+        beforeStart: false,
+        afterEnd: false
+      },
+      draggable: false,
+      cssClass: 'event-view'
+    };
+
+    return caledndarEvent;
   }
 
   public teachingActivityToCalendarObject(serializedActivity, date: Date): CalendarEvent {
@@ -98,11 +225,6 @@ export class ActivityManagerService {
     startDate = addDays(startDate, serializedActivity.day - 1);
 
     const endDate = addHours(startDate, serializedActivity.duration);
-
-
-    // console.log(startDate);
-    // console.log(endDate);
-    // console.log(serializedActivity);
 
     const activity = this.metadataUtil.serializedTeachingActivityToMetadata(serializedActivity);
 
@@ -122,8 +244,6 @@ export class ActivityManagerService {
       cssClass: 'event-view',
       meta: activity
     };
-
-    //console.log(caledndarEvent);
 
     return caledndarEvent;
   }

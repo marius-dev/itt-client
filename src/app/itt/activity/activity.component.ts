@@ -19,47 +19,28 @@ import {
 } from 'date-fns';
 
 import {
-  CalendarEvent,
-  CalendarEventAction,
-  CalendarEventTimesChangedEvent, CalendarDateFormatter
+  CalendarEvent
 } from 'angular-calendar';
 
 import {Subject} from 'rxjs/Subject';
 import {TranslateService} from 'ng2-translate';
-import {MainDateFormatter} from "./date-formatter.provider";
+import {MainDateFormatter} from './date-formatter.provider';
 
-
-const colors: any = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3'
-  },
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF'
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA'
-  }
-};
 
 @Component({
   selector: 'app-activity',
   templateUrl: './activity.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./activity.component.scss'],
-  providers: [{
-    provide: CalendarDateFormatter,
-    useClass: MainDateFormatter
-  }]
+  styleUrls: ['./activity.component.scss']
 })
 export class ActivityComponent implements OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
   view: string = 'day';
 
-  viewDate: Date = new Date();
+  viewDate: Date = new Date(2017, 4, 22);
+
+  lastViewDate: Date = this.viewDate;
 
   modalData: {
     action: string,
@@ -68,14 +49,11 @@ export class ActivityComponent implements OnInit {
 
   refresh: Subject<any> = new Subject();
 
-  events: CalendarEvent[] = [];
-
   activeDayIsOpen: boolean = true;
 
   weekStartsOn: number = 1;
 
   events$: Observable<any>;
-
 
   constructor(private modal: NgbModal,
               private translate: TranslateService,
@@ -85,44 +63,35 @@ export class ActivityComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.fetchEvents();
+    this.fetchEvents(false);
   }
 
-  fetchEvents(): void {
+  fetchEvents(check: boolean = true): void {
 
-    const getStart: any = {
-      month: startOfMonth,
-      week: startOfWeek,
-      day: startOfDay
-    }[this.view];
-
-    const getEnd: any = {
-      month: endOfMonth,
-      week: endOfWeek,
-      day: endOfDay
-    }[this.view];
-
-    // if (isSameWeek(date, this.viewDate)) {
-    //
-    // }
-
-    const tmpDate = new Date();
+    console.log(this.viewDate);
     const date = startOfWeek(
-      new Date(tmpDate.getTime() + tmpDate.getTimezoneOffset() * 60000),
+      this.viewDate,
       {weekStartsOn: 1}
     );
-    this.viewDate = date;
+
+    if (
+      (startOfWeek(this.lastViewDate, {weekStartsOn: 1}).getDay() === date.getDate()) &&
+      (startOfWeek(this.lastViewDate, {weekStartsOn: 1}).getMonth() !== date.getMonth()) && check) {
+      return;
+    }
 
     const pr = this.activityService.getActivitiesOnDate(date);
+
     this.events$ = Observable.fromPromise(pr)
       .map(res => {
         return res.json().map((activity) => {
-          return this.activityService.activityToCalendarObject(activity, date)
-        })
+          this.lastViewDate = this.viewDate;
+          return this.activityService.activityToCalendarObject(activity, date);
+        });
       });
   }
 
-  dayClicked({date, events}: {date: Date, events: CalendarEvent[]}): void {
+  dayClicked({date, events}: { date: Date, events: CalendarEvent[] }): void {
 
     if (isSameMonth(date, this.viewDate)) {
       if (
@@ -140,11 +109,6 @@ export class ActivityComponent implements OnInit {
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = {event, action};
     this.modal.open(this.modalContent, {size: 'lg'});
-  }
-
-  addEvent(activity: CalendarEvent): void {
-    this.events.push(activity);
-    this.refresh.next();
   }
 
   get getCurrntLang() {

@@ -31,7 +31,25 @@
   "laboratory": "Laborator",
   "exam": "Examen",
   "coloquim": "Colocviu",
-  "project": "Prezentare proiect",
+  "project": "Proiect",
   "at": "la",
-  "with": "cu"
+  "with": "cu",
+
+
+  "odd-WEEK": "Saptamani impare",
+  "even-WEEK": "Saptamani pare",
+  "every-WEEK": "Fiecare saptamana",
+
+  "LOCATION_PLACEHOLDER": "Sala de curs",
+  "TEACHER_PLACEHOLDER": "Profesor titular",
+  "DAY_IN_WEEK_PLACEHOLDER": "Numarul zilei din saptamana",
+  "HOUR_PLACEHOLDER": "Ora",
+  "ACTIVITY_TYPE_PLACEHOLDER": "Tip activitate",
+  "WEEK_TYPE_PLACEHOLDER": "Se repeta in:",
+  "ACTIVITY_DURATION_PLACEHOLDER": "Durata activitatii",
+  "PARTICIPANTS_PLACEHOLDER": "Lista participanti",
+  "SEMESTER_PLACEHOLDER": "Semestrul",
+  "ACADEMIC_YEAR_PLACEHOLDER": "Anul universitar",
+
+  "EDIT_ACTIVITY_LABEL": "Editare activitate"
 }
