@@ -14,6 +14,20 @@ export class TeachingActivity {
   participants: Participant[];
 }
 
+export class EvaluationActivity {
+  id: number;
+  duration: number;
+  hour: number;
+  activityCategory: string;
+  date: Date;
+
+  academicYear: string;
+  location: Location;
+  teacher: Teacher;
+  subject: Subject;
+  participants: Participant[];
+}
+
 export class Semester {
   id: number;
   number: number;

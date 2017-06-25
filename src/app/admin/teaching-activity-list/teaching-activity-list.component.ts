@@ -62,7 +62,7 @@ export class TeachingActivityListComponent implements OnInit {
   fetchActivities() {
     this.tableLoader = true;
     this.tableVisible = true;
-    const pr = this.activityManager.getAllActivitiesBySemesterAndSpecialization(
+    const pr = this.activityManager.getAllTeachongActivitiesByAcademicYearSpecializtion(
       this.academicYear,
       this.semesterNumber,
       this.specialization
@@ -79,17 +79,6 @@ export class TeachingActivityListComponent implements OnInit {
       this.temp = [...data];
       this.tableLoader = false;
     });
-  }
-
-  fetch(cb) {
-    const req = new XMLHttpRequest();
-    req.open('GET', `assets/data/company.json`);
-
-    req.onload = () => {
-      cb(JSON.parse(req.response));
-    };
-
-    req.send();
   }
 
   updateFilter(event) {

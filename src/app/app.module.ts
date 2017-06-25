@@ -40,6 +40,7 @@ import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import {FileUploadModule} from 'ng2-file-upload';
 import {SortablejsModule} from 'angular-sortablejs';
 import {TruncatePipe} from './util/truncate.pipe';
+import { DuplicateTeachingActivityComponent } from './admin/error-views/duplicate-teaching-activity-component/duplicate-teaching-activity-component.component';
 
 export function createTranslateLoader(http: Http) {
   return new TranslateStaticLoader(http, 'assets/i18n', '.json');
@@ -64,7 +65,8 @@ export const firebaseConfig = environment.firebaseConfig;
     EvaluationActivityComponent,
     EvaluationActivityListComponent,
     TeachingActivityListComponent,
-    TruncatePipe
+    TruncatePipe,
+    DuplicateTeachingActivityComponent
   ],
   imports: [
     MdAutocompleteModule,
@@ -93,7 +95,8 @@ export const firebaseConfig = environment.firebaseConfig;
     })
   ],
   entryComponents: [
-    AskForUserRemovalComponent
+    AskForUserRemovalComponent,
+    DuplicateTeachingActivityComponent
   ],
   providers: [
     MenuItems,

@@ -12,7 +12,7 @@ export const studentRoutes = {
 
 export const activityRoutes = {
   teachingActivityApi: 'api/v1/teaching-activity',
-  evaluationActivityApi: 'api/v1/ev',
+  evaluationActivityApi: 'api/v1/evaluation-activity',
   activityApi: 'api/v1/activity'
 };
 

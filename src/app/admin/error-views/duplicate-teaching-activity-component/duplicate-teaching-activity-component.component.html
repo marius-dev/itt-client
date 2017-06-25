@@ -1,0 +1,26 @@
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">Error</h4>
+    </div>
+    <div class="modal-body">
+      <table style="width:100%">
+        <caption>{{'DUPLICATE_FIELDS' | translate}}</caption>
+        <tr>
+          <th>{{'SUBJECT_PLACEHOLDER' | translate}}</th>
+          <th>{{'LOCATION_PLACEHOLDER' | translate}}</th>
+          <th>{{'TEACHER_PLACEHOLDER' | translate}}</th>
+          <th>{{'ACTIVITY_TYPE_PLACEHOLDER' | translate}}</th>
+          <th>{{'SEMESTER_PLACEHOLDER' | translate}}</th>
+        </tr>
+        <tr  *ngFor="let field of duplicateFields">
+          <td>{{field.subject}}</td>
+          <td>{{field.location}}</td>
+          <td>{{field.teacher}}</td>
+          <td>{{field.type}}</td>
+          <td>{{field.semester}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>`

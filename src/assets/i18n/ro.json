@@ -50,6 +50,9 @@
   "PARTICIPANTS_PLACEHOLDER": "Lista participanti",
   "SEMESTER_PLACEHOLDER": "Semestrul",
   "ACADEMIC_YEAR_PLACEHOLDER": "Anul universitar",
+  "SUBJECT_PLACEHOLDER": "Materia",
 
-  "EDIT_ACTIVITY_LABEL": "Editare activitate"
+  "EDIT_ACTIVITY_LABEL": "Editare activitate",
+
+  "DUPLICATE_FIELDS": "Campuri duplicat"
 }

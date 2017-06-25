@@ -146,14 +146,58 @@ export class ActivityManagerService {
       });
   }
 
-  public getAllActivitiesBySemesterAndSpecialization(academicYear: string, semesterNumber: number, specializationId: number): Promise<any> {
+  public getAllEvaluationActivitiesBySemesterAndSpecialization(academicYear: string, specializationId: number, type: string): Promise<any> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
     const options = new RequestOptions({headers: headers});
 
     return this.http
-      .get(environment.coreIttUrl + '/' + activityRoutes.teachingActivityApi + '/all/' + academicYear + '/' + semesterNumber + '/' + specializationId, options)
+      .get(
+        environment.coreIttUrl + '/' + activityRoutes.evaluationActivityApi + '/all/' +
+        academicYear + '/' + specializationId + '/' + type ,
+        options
+      )
+      .toPromise()
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  public getAllActivitiesBySemesterAndSpecializationAndType(academicYear: string, specializationId: number, type: string): Promise<any> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const options = new RequestOptions({headers: headers});
+
+    return this.http
+      .get(
+        environment.coreIttUrl + '/' + activityRoutes.evaluationActivityApi + '/all/' +
+        academicYear + '/' + specializationId,
+        options
+      )
+      .toPromise()
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  public getAllTeachongActivitiesByAcademicYearSpecializtion(
+    academicYear: string,
+    semesterNumber: number,
+    specializationId: number
+  ): Promise<any> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const options = new RequestOptions({headers: headers});
+
+    return this.http
+      .get(
+        environment.coreIttUrl + '/' + activityRoutes.teachingActivityApi + '/all/' +
+        academicYear + '/' + semesterNumber + '/' + specializationId,
+        options
+      )
       .toPromise()
       .catch(err => {
         return this.handleError(err);
@@ -175,7 +219,7 @@ export class ActivityManagerService {
   }
 
   public activitiesToCalendarObjects(serializedActivities, date: Date) {
-    let events: CalendarEvent[];
+    const events: CalendarEvent[] = [];
 
     serializedActivities.forEach((item, index) => {
       events.push(this.activityToCalendarObject(item, date));
