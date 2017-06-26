@@ -15,43 +15,65 @@ import {DuplicateTeachingActivityComponent} from '../error-views/duplicate-teach
 export class ActivityLoadComponent implements OnInit {
   @ViewChild('error_modal_duplicate_activities') duplicateErrorModal: TemplateRef<any>;
 
+  currentTab: string;
 
-  uploader: FileUploader;
-  hasBaseDropZoneOver = false;
+  teachingActivityUploader: FileUploader;
+  evaluationActivityUploader: FileUploader;
 
+  teachingActivityDropDownHover = false;
+  evaluationActivityDropDownHover = false;
+
+  evaluationActivityTypeOptions: string[];
   semesterOptions: number[];
   academicYearOptions: Observable<number[]>;
 
-  duplicateAtctivities = [];
+  duplicateActivities = [];
 
   selectedSemester: number;
   selectedAcademicYear: string;
+  selectedEvaluationType: string;
 
   constructor(private http: Http,
               private modalService: NgbModal) {
-    this.uploader = new FileUploader({});
+    this.teachingActivityUploader = new FileUploader({});
+    this.evaluationActivityUploader = new FileUploader({});
     this.semesterOptions = [1, 2];
+    this.evaluationActivityTypeOptions = ['exam','restanta'];
     this.fetchAcademicYears();
   }
 
   ngOnInit() {
-    this.uploader.onErrorItem = (item: any, response: any, status: 409, headers: any) => {
+    this.teachingActivityUploader.onErrorItem = (item: any, response: any, status: 409, headers: any) => {
       const responsePath = JSON.parse(response);
-      const fields = JSON.parse(responsePath.error.exception[0].message);
-      this.duplicateAtctivities = fields;
+      this.duplicateActivities = JSON.parse(responsePath.error.exception[0].message);
+      this.modalService.open(this.duplicateErrorModal, {size: 'lg'});
+    };
+
+    this.evaluationActivityUploader.onErrorItem = (item: any, response: any, status: 409, headers: any) => {
+      const responsePath = JSON.parse(response);
+      this.duplicateActivities = JSON.parse(responsePath.error.exception[0].message);
       this.modalService.open(this.duplicateErrorModal, {size: 'lg'});
     };
   }
 
   changeTarget() {
-    const url = environment.coreIttUrl + '/' +
+    const taUrl = environment.coreIttUrl + '/' +
       activityRoutes.teachingActivityApi + '/file/' +
       this.selectedAcademicYear + '/' + this.selectedSemester;
-    this.uploader.setOptions({url: url});
+    this.teachingActivityUploader.setOptions({url: taUrl});
+
+    const eaUrl = environment.coreIttUrl + '/' +
+      activityRoutes.evaluationActivityApi + '/file/' +
+      this.selectedAcademicYear + '/' + this.selectedEvaluationType;
+    this.evaluationActivityUploader.setOptions({url: eaUrl});
   }
 
-  fileOverBase(e: any): void {
-    this.hasBaseDropZoneOver = e;
+  fileOverTeachingActivityBase(e: any): void {
+    this.teachingActivityDropDownHover = e;
+  }
+
+  fileOverEvaluationActivityBase(e: any): void {
+    this.evaluationActivityDropDownHover = e;
   }
 
   fetchAcademicYears() {

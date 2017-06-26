@@ -36,17 +36,17 @@
                   <div *ngIf="ta_uploadForm.valid" fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign="start">
                     <div fxFlex.gt-sm="30" fxFlex.gt-xs="100" fxFlex="100" class="pr-1">
                       <div class="file-type" ng2FileDrop
-                           [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-                           (fileOver)="fileOverBase($event)" (click)="teaching_activity_file.click()"
-                           [uploader]="uploader">Drop
+                           [ngClass]="{'nv-file-over': teachingActivityDropDownHover}"
+                           (fileOver)="fileOverTeachingActivityBase($event)" (click)="teaching_activity_file.click()"
+                           [uploader]="teachingActivityUploader">Drop
                       </div>
-                      <input type="file" class="app-hidden" #teaching_activity_file ng2FileSelect [uploader]="uploader"/>
+                      <input type="file" class="app-hidden" #teaching_activity_file ng2FileSelect [uploader]="teachingActivityUploader"/>
                     </div>
                     <div fxFlex.gt-sm="70" fxFlex.gt-xs="100" fxFlex="100">
                       <div class="pad-wrap">
                         <ngx-datatable
                           class="material ml-0 mr-0 mrgn-b-md"
-                          [rows]="uploader.queue"
+                          [rows]="teachingActivityUploader.queue"
                           [columnMode]="'flex'"
                           [headerHeight]="50"
                           [footerHeight]="0"
@@ -56,7 +56,7 @@
                               {{ row?.file?.name }}
                             </ng-template>
                           </ngx-datatable-column>
-                          <ngx-datatable-column name="Progress" *ngIf="uploader.options.isHTML5" [flexGrow]="1">
+                          <ngx-datatable-column name="Progress" *ngIf="teachingActivityUploader.options.isHTML5" [flexGrow]="1">
                             <ng-template let-row="row" ngx-datatable-cell-template>
                               <md-progress-bar mode="determinate" value="{{row.progress}}"></md-progress-bar>
                             </ng-template>
@@ -93,8 +93,92 @@
           </div>
         </md-tab>
         <md-tab label="Adaugare activitati de evaluare">
-          <div>
-            Evaluare
+          <!--Evaluare-->
+          <div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign=" start" class="app-file-upload">
+            <md-card fxFlex="100%">
+              <div class="app-card-title">
+              </div>
+              <div class="app-card-content">
+                <form #ea_uploadForm="ngForm" fxFlex="100">
+                  <div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign="start">
+                    <div fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                      <md-select name="academicYear"
+                                 (change)="changeTarget()"
+                                 fxFlex="100" placeholder="{{'ACADEMIC_YEAR_PLACEHOLDER' | translate}}"
+                                 [(ngModel)]="selectedAcademicYear"
+                                 required="true">
+                        <md-option *ngFor="let ay of academicYearOptions  | async" [value]="ay?.name">{{ ay?.name }}
+                        </md-option>
+                      </md-select>
+                    </div>
+                    <div fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+                      <md-select name="evaluationType"
+                                 placeholder="{{'EVALUATION_ACTIVITY_TYPE_PLACEHOLDER' | translate}}"
+                                 (change)="changeTarget()"
+                                 [(ngModel)]="selectedEvaluationType"
+                                 required="true">
+                        <md-option *ngFor="let type of evaluationActivityTypeOptions" [value]="type">{{ type}}</md-option>
+                      </md-select>
+                    </div>
+                    <br><br>
+                  </div>
+                  <div *ngIf="ea_uploadForm.valid" fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign="start">
+                    <div fxFlex.gt-sm="30" fxFlex.gt-xs="100" fxFlex="100" class="pr-1">
+                      <div class="file-type" ng2FileDrop
+                           [ngClass]="{'nv-file-over': teachingActivityDropDownHover}"
+                           (fileOver)="fileOverEvaluationActivityBase($event)" (click)="teaching_activity_file.click()"
+                           [uploader]="evaluationActivityUploader">Drop
+                      </div>
+                      <input type="file" class="app-hidden" #teaching_activity_file ng2FileSelect [uploader]="evaluationActivityUploader"/>
+                    </div>
+                    <div fxFlex.gt-sm="70" fxFlex.gt-xs="100" fxFlex="100">
+                      <div class="pad-wrap">
+                        <ngx-datatable
+                          class="material ml-0 mr-0 mrgn-b-md"
+                          [rows]="evaluationActivityUploader.queue"
+                          [columnMode]="'flex'"
+                          [headerHeight]="50"
+                          [footerHeight]="0"
+                          [rowHeight]="'auto'">
+                          <ngx-datatable-column name="Name" [flexGrow]="2">
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                              {{ row?.file?.name }}
+                            </ng-template>
+                          </ngx-datatable-column>
+                          <ngx-datatable-column name="Progress" *ngIf="evaluationActivityUploader.options.isHTML5" [flexGrow]="1">
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                              <md-progress-bar mode="determinate" value="{{row.progress}}"></md-progress-bar>
+                            </ng-template>
+                          </ngx-datatable-column>
+                          <ngx-datatable-column name="Status" [flexGrow]="1">
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                              <span *ngIf="row.isSuccess"><md-icon>check</md-icon></span>
+                              <span *ngIf="row.isCancel"><md-icon>cancel</md-icon></span>
+                              <span *ngIf="row.isError"><md-icon>delete</md-icon></span>
+                            </ng-template>
+                          </ngx-datatable-column>
+                          <ngx-datatable-column name="Action" [flexGrow]="2">
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                              <button md-raised-button md-button-sm type="button"
+                                      (click)="row.upload()"
+                                      [disabled]="row.isReady || row.isUploading || row.isSuccess">
+                                Upload
+                              </button>
+                              <button md-raised-button md-button-sm type="button"
+                                      (click)="row.cancel()" [disabled]="!row.isUploading">Cancel
+                              </button>
+                              <button md-raised-button md-button-sm type="button"
+                                      (click)="row.remove()">Remove
+                              </button>
+                            </ng-template>
+                          </ngx-datatable-column>
+                        </ngx-datatable>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </md-card>
           </div>
         </md-tab>
       </md-tab-group>
@@ -111,7 +195,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <app-duplicate-teaching-activity-component [duplicateFields]="duplicateAtctivities" >
+    <app-duplicate-teaching-activity-component [duplicateFields]="duplicateActivities" >
     </app-duplicate-teaching-activity-component>
   </div>
   <md-icon (click)="close()" class="modal-confirm-btn">done</md-icon>

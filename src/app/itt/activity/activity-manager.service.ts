@@ -110,6 +110,31 @@ export class ActivityManagerService {
 
   }
 
+  public getAllEvaluationActivityTypes() {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const options = new RequestOptions({headers: headers});
+
+    return this.http
+      .get(environment.coreIttUrl + '/' + activityRoutes.evaluationActivityApi + '/all-types', options)
+      .toPromise()
+      .catch(err => {
+        return this.handleError(err);
+      });
+
+  }
+
+  public updateEvaluationActivity(activityId, changes): Observable<any> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const options = new RequestOptions({headers: headers});
+
+    return this.http
+      .put(environment.coreIttUrl + '/' + activityRoutes.evaluationActivityApi + '/' + activityId, JSON.stringify(changes), options);
+  }
+
   public updateTeachingActivity(activityId, changes): Observable<any> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -118,7 +143,7 @@ export class ActivityManagerService {
 
     return this.http
       .put(environment.coreIttUrl + '/' + activityRoutes.teachingActivityApi + '/' + activityId, JSON.stringify(changes), options);
-   }
+  }
 
   public getActivitiesOnDate(date: Date): Promise<any> {
     const headers = new Headers();

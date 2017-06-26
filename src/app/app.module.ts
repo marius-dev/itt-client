@@ -42,6 +42,7 @@ import {SortablejsModule} from 'angular-sortablejs';
 import {TruncatePipe} from './util/truncate.pipe';
 import { DuplicateTeachingActivityComponent } from './admin/error-views/duplicate-teaching-activity-component/duplicate-teaching-activity-component.component';
 import { DateTimePickerComponent } from './admin/util/date-time-picker/date-time-picker.component';
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 export function createTranslateLoader(http: Http) {
   return new TranslateStaticLoader(http, 'assets/i18n', '.json');
@@ -88,6 +89,7 @@ export const firebaseConfig = environment.firebaseConfig;
     Angular2FontawesomeModule,
     FlexLayoutModule,
     QuillModule,
+    NgbModule.forRoot(),
     PerfectScrollbarModule.forRoot(perfectScrollbarConfig),
     MenuToggleModule,
     TranslateModule.forRoot({

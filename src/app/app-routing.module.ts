@@ -16,6 +16,7 @@ import {TeachingActivityListComponent} from './admin/teaching-activity-list/teac
 import {TeachingActivityComponent} from './admin/teaching-activity/teaching-activity.component';
 import {ActivityLoadComponent} from './admin/activity-load/activity-load.component';
 import {EvaluationActivityListComponent} from './admin/evaluation-activity-list/evaluation-activity-list.component';
+import {EvaluationActivityComponent} from "./admin/evaluation-activity/evaluation-activity.component";
 
 const appRoutes: Routes = [
   {
@@ -33,6 +34,7 @@ const appRoutes: Routes = [
     children: [
       {path: '', component: ActivityLoadComponent},
       {path: 'teaching-activity/:id', component: TeachingActivityComponent },
+      {path: 'evaluation-activity/:id', component: EvaluationActivityComponent },
       {path: 'profile', component: UserProfileComponent},
       {path: 'teaching-activities', component: TeachingActivityListComponent},
       {path: 'evaluation-activities', component: EvaluationActivityListComponent},

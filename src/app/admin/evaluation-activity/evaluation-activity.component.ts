@@ -30,8 +30,10 @@ export class EvaluationActivityComponent implements OnInit, OnDestroy {
   private allActivityTypes: Observable<string[]>;
   private allParticipants: Observable<Participant[]>;
   private allAcademicYears: Observable<string[]>;
+  private evaluationActivityTypeOptions = ['exam', 'restanta'];
 
   participantsId: number[];
+  asistantsId: number[];
 
   private changes;
   stateCtrl: FormControl;
@@ -56,7 +58,7 @@ export class EvaluationActivityComponent implements OnInit, OnDestroy {
     this.initModel();
     this.loadTeachers();
     this.loadLocations();
-    this.loadTeachingActivityTypes();
+    this.loadEvaluationActivityTypes();
     this.loadParticipants();
     this.loadAcademicYears();
   }
@@ -92,7 +94,7 @@ export class EvaluationActivityComponent implements OnInit, OnDestroy {
       });
   }
 
-  loadTeachingActivityTypes() {
+  loadEvaluationActivityTypes() {
     const pr = this.activityManager.getAllTeachingActivityTypes();
     this.allActivityTypes = Observable.fromPromise(pr)
       .map(res => {
@@ -177,7 +179,7 @@ export class EvaluationActivityComponent implements OnInit, OnDestroy {
 
   sendChanges() {
     if (this.changes.length !== 0) {
-      this.activityManager.updateTeachingActivity(this.currentActivity.id, this.arrayToObject(this.changes))
+      this.activityManager.updateEvaluationActivity(this.currentActivity.id, this.arrayToObject(this.changes))
         .toPromise()
         .then(resp => {
           this.openSnackBar('Updated');
