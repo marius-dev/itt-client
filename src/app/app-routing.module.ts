@@ -3,9 +3,6 @@ import {RouterModule, Routes} from '@angular/router';
 import {AppComponent} from './app.component';
 import {MainComponent} from './main/main.component';
 import {AdminComponent} from './admin/admin.component';
-import {LockScreenComponent} from './session/lockscreen/lockscreen.component';
-import {ForgotPasswordComponent} from './session/forgot-password/forgot-password.component';
-import {LoginViewComponent} from './session/login-view/login-view.component';
 import {AuthGuard} from './security/auth/auth-guard';
 import {LoginComponent} from './security/auth/login/login.component';
 import {UserProfileComponent} from './security/users/user-profile/user-profile.component';
@@ -19,6 +16,8 @@ import {EvaluationActivityListComponent} from './admin/evaluation-activity-list/
 import {EvaluationActivityComponent} from './admin/evaluation-activity/evaluation-activity.component';
 import {DatabaseViewComponent} from './admin/database-view/database-view.component';
 import {ParticipantsStructureComponent} from './itt/participants-structure/participants-structure.component';
+import {ForgotPasswordComponent} from './security/session/forgot-password/forgot-password.component';
+import {LockScreenComponent} from './security/session/lockscreen/lockscreen.component';
 
 const appRoutes: Routes = [
   {

@@ -11,7 +11,6 @@ import {AuthGuard} from './auth/auth-guard';
 import {UploadService} from './storage/upload.service';
 import {LoginComponent} from './auth/login/login.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {LoginViewComponent} from '../session/login-view/login-view.component';
 import {EqualTextValidatorDirective} from './users/equal.validator';
 import {UserProfileComponent} from './users/user-profile/user-profile.component';
 import {AskForUserRemovalComponent, UserComponent} from './users/user/user.component';
@@ -19,13 +18,13 @@ import {UserCreateComponent} from './users/user-create/user-create.component';
 import {UserListComponent} from './users/user-list/user-list.component';
 import {AppRoutingModule} from '../app-routing.module';
 
-import {ImageCropperComponent} from 'ng2-img-cropper';
+import {ImageCropperModule} from 'ng2-img-cropper';
 import {FormsModule} from '@angular/forms';
 import {MaterialModule, MdDialogModule} from '@angular/material';
-import {LockScreenComponent} from '../session/lockscreen/lockscreen.component';
-import {ForgotPasswordComponent} from '../session/forgot-password/forgot-password.component';
 import {Angular2FontawesomeModule} from 'angular2-fontawesome';
 import {AngularFireDatabase} from 'angularfire2/database';
+import {LoginViewComponent} from './session/login-view/login-view.component';
+import {LockScreenComponent} from './session/lockscreen/lockscreen.component';
 
 export const firebaseConfig = environment.firebaseConfig;
 
@@ -38,7 +37,8 @@ export const firebaseConfig = environment.firebaseConfig;
     Angular2FontawesomeModule,
     CommonModule,
     AppRoutingModule,
-    MdDialogModule
+    MdDialogModule,
+    ImageCropperModule
   ],
   declarations: [
     LoginComponent,
@@ -47,7 +47,6 @@ export const firebaseConfig = environment.firebaseConfig;
     UserCreateComponent,
     UserListComponent,
     EqualTextValidatorDirective,
-    ImageCropperComponent,
     LoginViewComponent,
     LockScreenComponent,
     ForgotPasswordComponent,

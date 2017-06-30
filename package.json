@@ -55,7 +55,7 @@
     "screenfull": "^3.0.2",
     "sortablejs": "^1.6.0",
     "ts-helpers": "^1.1.1",
-    "typescript": "^2.2.1",
+    "typescript": "2.3.4",
     "zone.js": "0.8.5"
   },
   "devDependencies": {

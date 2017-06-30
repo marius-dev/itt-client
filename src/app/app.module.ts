@@ -40,13 +40,13 @@ import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import {FileUploadModule} from 'ng2-file-upload';
 import {SortablejsModule} from 'angular-sortablejs';
 import {TruncatePipe} from './util/truncate.pipe';
-import {DuplicateTeachingActivityComponent} from
-  './admin/error-views/duplicate-teaching-activity-component/duplicate-teaching-activity-component.component';
+import {DuplicateTeachingActivityComponent} from './admin/error-views/duplicate-teaching-activity-component/duplicate-teaching-activity-component.component';
 import {DateTimePickerComponent} from './admin/util/date-time-picker/date-time-picker.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NotFoundElementsComponent} from './admin/error-views/not-found-elements/not-found-elements.component';
 import { SafePipePipe } from './admin/util/safe-pipe.pipe';
 import { DatabaseViewComponent } from './admin/database-view/database-view.component';
+import {nvD3} from './core/nvD3/nvD3.component';
 export function createTranslateLoader(http: Http) {
   return new TranslateStaticLoader(http, 'assets/i18n', '.json');
 }
@@ -74,7 +74,8 @@ export const firebaseConfig = environment.firebaseConfig;
     DateTimePickerComponent,
     NotFoundElementsComponent,
     SafePipePipe,
-    DatabaseViewComponent
+    DatabaseViewComponent,
+    nvD3
   ],
   imports: [
     MdAutocompleteModule,

@@ -16,7 +16,7 @@
                     </div>
                 </div>
 
-                <form  (ngSubmit)="tryLogin($event)">
+                <form  #form (ngSubmit)="tryLogin($event)">
                     <div fxLayout="column" fxLayoutAlign="start stretch">
                         <md-input-container class="mrgn-b-md">
                             <input mdInput placeholder="E-Mail" type="text" name="email" required [(ngModel)]="user.email">
