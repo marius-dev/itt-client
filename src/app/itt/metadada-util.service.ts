@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {TeachingActivity, Teacher, Semester, Subject, Participant, Location, EvaluationActivity} from './calendar-metadata';
+import {TeachingActivity, Teacher, Semester, Subject, Participant, Location, EvaluationActivity, AcademicYear} from './calendar-metadata';
 
 
 @Injectable()
@@ -37,15 +37,14 @@ export class MetadataUtilService {
     activity.id = serializedEvaluationActivity.id;
     activity.duration = serializedEvaluationActivity.duration;
     activity.hour = serializedEvaluationActivity.hour;
-    activity.date = serializedEvaluationActivity.date;
+    activity.date = new Date(serializedEvaluationActivity.date);
     activity.activityCategory = serializedEvaluationActivity.activityCategory;
     activity.location = this.serializedLocationToMetadata(serializedEvaluationActivity.location);
     activity.teacher = this.serializedTeacherToMetadata(serializedEvaluationActivity.teacher);
     activity.subject = this.serializedSubjectToMetadata(serializedEvaluationActivity.subject);
-    activity.academicYear = serializedEvaluationActivity.academicYear;
+    activity.academicYear = this.serializedAcademicYearToMetadata(serializedEvaluationActivity.academicYear);
 
     activity.participants = serializedEvaluationActivity.participants.map(this.serializedParticipantToMetadata);
-
 
     return activity;
   }
@@ -74,7 +73,7 @@ export class MetadataUtilService {
     semester.id = serielizedSemester.id;
     semester.number = serielizedSemester.number;
     semester.key = serielizedSemester.key;
-    semester.academicYear = serielizedSemester.academicYear.name;
+    semester.academicYear = this.serializedAcademicYearToMetadata(serielizedSemester.academicYear);
     semester.number = serielizedSemester.number;
 
     return semester;
@@ -88,6 +87,14 @@ export class MetadataUtilService {
     subject.shortName = serielizedSubject.shortName;
 
     return subject;
+  }
+
+  serializedAcademicYearToMetadata(serielizedSubject): AcademicYear {
+    const academicYear = new AcademicYear();
+    academicYear.id = serielizedSubject.id;
+    academicYear.name = serielizedSubject.name;
+
+    return academicYear;
   }
 
   serializedParticipantToMetadata(serielizedParticipant): Participant {

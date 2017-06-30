@@ -1,5 +1,5 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../auth.service';
 import {Subscription} from 'rxjs';
 import {AuthUser} from '../auth-user';
@@ -14,13 +14,19 @@ export class LoginComponent implements OnInit, OnDestroy {
   request: Subscription;
   tryingToLogIn: boolean;
 
+  returnUrl: string;
+
   constructor(private router: Router,
+              private route: ActivatedRoute,
               private auth: AuthService) {
   }
 
   ngOnInit() {
+    // get return url from route parameters or default to '/'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+
     if (this.auth.authenticated === true) {
-      this.router.navigate(['/']);
+      this.router.navigateByUrl(this.returnUrl);
     }
   }
 
@@ -32,11 +38,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.request = this.auth
       .login(user.email, user.password)
       .subscribe(
-        // Is the data
         (lUser) => {
           if (lUser) {
             this.loginError = null;
-            this.router.navigate(['/']).then(() => {
+            this.router.navigateByUrl(this.returnUrl).then(() => {
             });
           } else {
             this.loginError = 'username and password was wrong';

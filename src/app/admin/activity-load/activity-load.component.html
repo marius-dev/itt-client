@@ -200,3 +200,17 @@
   </div>
   <md-icon (click)="close()" class="modal-confirm-btn">done</md-icon>
 </ng-template>
+
+
+<ng-template #error_modal_not_found_elements>
+  <div class="modal-header">
+    <button color="primary" class="close" (click)="close()">
+      <md-icon>close</md-icon>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-not-found-elements [notFoundedFields]="notFoundedElements" >
+    </app-not-found-elements>
+  </div>
+  <md-icon (click)="close()" class="modal-confirm-btn">done</md-icon>
+</ng-template>

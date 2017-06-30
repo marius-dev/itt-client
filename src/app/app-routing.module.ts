@@ -16,7 +16,9 @@ import {TeachingActivityListComponent} from './admin/teaching-activity-list/teac
 import {TeachingActivityComponent} from './admin/teaching-activity/teaching-activity.component';
 import {ActivityLoadComponent} from './admin/activity-load/activity-load.component';
 import {EvaluationActivityListComponent} from './admin/evaluation-activity-list/evaluation-activity-list.component';
-import {EvaluationActivityComponent} from "./admin/evaluation-activity/evaluation-activity.component";
+import {EvaluationActivityComponent} from './admin/evaluation-activity/evaluation-activity.component';
+import {DatabaseViewComponent} from './admin/database-view/database-view.component';
+import {ParticipantsStructureComponent} from './itt/participants-structure/participants-structure.component';
 
 const appRoutes: Routes = [
   {
@@ -32,16 +34,18 @@ const appRoutes: Routes = [
     path: '',
     component: MainComponent,
     children: [
-      {path: '', component: ActivityLoadComponent},
-      {path: 'teaching-activity/:id', component: TeachingActivityComponent },
-      {path: 'evaluation-activity/:id', component: EvaluationActivityComponent },
-      {path: 'profile', component: UserProfileComponent},
-      {path: 'teaching-activities', component: TeachingActivityListComponent},
-      {path: 'evaluation-activities', component: EvaluationActivityListComponent},
-      {path: 'forbidden', component: AdminComponent},
-      {path: 'users/add', component: UserCreateComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
-      {path: 'users/list', component: UserListComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
+      {path: '', component: ParticipantsStructureComponent},
+      {path: 'db', component: DatabaseViewComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
+      {path: 'admin/activities/teaching/list', component: TeachingActivityListComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
+      {path: 'admin/activities/evaluation/list', component: EvaluationActivityListComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
+      {path: 'admin/activity/teaching/:id', component: TeachingActivityComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
+      {path: 'admin/activity/evaluation/:id', component: EvaluationActivityComponent, canActivate: [AuthGuard], data: {roles: ['admin']} },
+      {path: 'admin/activities/load', component: ActivityLoadComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
+      {path: 'admin/user/add', component: UserCreateComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
+      {path: 'admin/users/list', component: UserListComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
       {path: 'activities', component: ActivityComponent, canActivate: [AuthGuard], data: {roles: ['student', 'teacher']}},
+      {path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard]},
+      {path: 'forbidden', component: AdminComponent},
     ]
   }
 ];

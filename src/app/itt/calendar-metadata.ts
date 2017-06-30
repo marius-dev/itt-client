@@ -21,7 +21,7 @@ export class EvaluationActivity {
   activityCategory: string;
   date: Date;
 
-  academicYear: string;
+  academicYear: AcademicYear;
   location: Location;
   teacher: Teacher;
   subject: Subject;
@@ -32,7 +32,7 @@ export class Semester {
   id: number;
   number: number;
   key: string;
-  academicYear: string;
+  academicYear: AcademicYear;
 }
 
 export class Teacher {
@@ -76,3 +76,7 @@ export class Location {
   shortName: string;
 }
 
+export class AcademicYear {
+  id: number;
+  name: string;
+}

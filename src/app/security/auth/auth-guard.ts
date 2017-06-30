@@ -8,18 +8,30 @@ export class AuthGuard implements CanActivate {
   constructor(private auth: AuthService, private router: Router) {
   }
 
-  canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot, canRedirect: boolean = true): Observable<boolean> {
     const roles = route.data['roles'] as Array<string>;
-    // ['teacher', 'admin']
+
+    if (localStorage.getItem('currentUser')) {
+      console.log('in cache');
+      return Observable.of(true);
+    }
+
     if (!this.auth.authenticated) {
-      this.router.navigate(['/login']);
+      if (canRedirect) {
+        this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}});
+      }
       return Observable.of(false);
     }
 
     return this.auth.isAuthenticated(roles)
       .do(authenticated => {
         if (!authenticated) {
-          this.router.navigate(['/forbidden']);
+          if (canRedirect) {
+            this.router.navigate(['/forbidden']);
+          }
+          return Observable.of(false);
+        }else {
+          return Observable.of(true);
         }
       });
   }

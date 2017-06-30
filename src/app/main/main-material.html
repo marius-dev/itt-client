@@ -4,16 +4,18 @@
     <md-sidenav #sidenav [mode]="sidenavMode" [opened]="sidenavOpen" class="sidebar-area">
       <div class="sidebar-panel app-sidenav" fxLayout="column">
         <md-toolbar class="sidebar-logo">
-          <div class="app-logo">
+          <a class="app-logo" [routerLink]="['/']">
             <div class="logo-sign inline-block"><img src="assets/img/logo-sign.png" width="30" height="30"></div>
             <div class="logo-text inline-block"><img src="assets/img/logo-text.png" width="90" height="27"></div>
-          </div>
+          </a>
         </md-toolbar>
         <div class="sidebar-container">
-          <div class="app-user-thumb text-center">
-            <img  class="img-responsive img-circle"[src]="data && data.image ? data.image :  'assets/img/pro-thumb.jpg'"  width="107" height="107"
+          <div *ngIf="data" class="app-user-thumb text-center">
+            <img class="img-responsive img-circle" [src]="data && data.image ? data.image :  'assets/img/pro-thumb.jpg'"
+                 width="107" height="107"
                  alt="user list image">
-            <span class="app-user-name app-block">{{user ? user.profile.name + ' ' + user.profile.surname : 'Guest'}}</span>
+            <span
+              class="app-user-name app-block">{{user ? user.profile.name + ' ' + user.profile.surname : 'Guest'}}</span>
           </div>
           <div class="sidenav-scrollbar-container" fxLayout="column">
             <perfect-scrollbar>
@@ -32,8 +34,12 @@
                   </a>
                   <md-nav-list class="sub-menu" *ngIf="menuitem.type === 'sub'">
                     <md-list-item *ngFor="let childitem of menuitem.children" routerLinkActive="open">
-                      <a [routerLink]="['/', menuitem.state, childitem.state ]" routerLinkActive="active-link"
-                         class="app-relative" md-ripple>{{ childitem.name | translate }}</a>
+
+                      <a class="app-relative" [routerLink]="[childitem.state]" routerLinkActive="active-link"
+                         class="app-relative" md-ripple>
+                        <md-icon *ngIf="childitem.icon">{{ childitem.icon }}</md-icon>
+                        <span>{{ childitem.name | translate }}</span>
+                      </a>
                     </md-list-item>
                   </md-nav-list>
                 </md-list-item>
@@ -172,15 +178,23 @@
 </div>
 
 <md-menu class="user-menu" x-position="before" y-position="below" #menu="mdMenu">
-  <a md-menu-item [routerLink]="['/profile']" >
-    <md-icon>account_circle</md-icon>
-    <span>Profile</span>
-  </a>
-  <md-divider></md-divider>
-  <a (click)="logout()" md-menu-item>
-    <md-icon>exit_to_app</md-icon>
-    <span>Logout</span>
-  </a>
+  <div *ngIf="data">
+    <a md-menu-item [routerLink]="['/profile']">
+      <md-icon>account_circle</md-icon>
+      <span>Profile</span>
+    </a>
+    <md-divider></md-divider>
+    <a (click)="logout()" md-menu-item>
+      <md-icon>exit_to_app</md-icon>
+      <span>Logout</span>
+    </a>
+  </div>
+  <div *ngIf="!data">
+    <a md-menu-item [routerLink]="['/login']">
+      <md-icon>exit_to_app</md-icon>
+      <span>Login</span>
+    </a>
+  </div>
 </md-menu>
 
 <md-menu class="apps-menu" x-position="after" y-position="below" #appsmenu="mdMenu">

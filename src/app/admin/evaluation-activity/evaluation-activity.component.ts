@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {EvaluationActivity, Location, Participant, Subject, Teacher} from '../../itt/calendar-metadata';
+import {AcademicYear, EvaluationActivity, Location, Participant, Subject, Teacher} from '../../itt/calendar-metadata';
 import {Observable} from 'rxjs/Observable';
 import {FormControl} from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
@@ -10,6 +10,12 @@ import {ActivityManagerService} from '../../itt/activity/activity-manager.servic
 import {environment} from '../../../environments/environment';
 import {academicYearRoute} from '../../external-api-routes';
 import * as JQuery from 'jquery';
+import {
+  subDays,
+  isSameDay,
+  isSameYear,
+  isSameMonth
+} from 'date-fns';
 
 @Component({
   selector: 'app-evaluation-activity',
@@ -61,6 +67,7 @@ export class EvaluationActivityComponent implements OnInit, OnDestroy {
     this.loadEvaluationActivityTypes();
     this.loadParticipants();
     this.loadAcademicYears();
+    this.loadSubjects();
   }
 
 
@@ -84,6 +91,16 @@ export class EvaluationActivityComponent implements OnInit, OnDestroy {
       });
   }
 
+  loadSubjects() {
+    const pr = this.activityManager.getAllSubjects();
+    this.allSubjects = Observable.fromPromise(pr)
+      .map(res => {
+        return res.json().map((subject) => {
+          return this.metadataUtil.serializedSubjectToMetadata(subject);
+        });
+      });
+  }
+
   loadParticipants() {
     const pr = this.activityManager.getAllParticipants();
     this.allParticipants = Observable.fromPromise(pr)
@@ -95,7 +112,7 @@ export class EvaluationActivityComponent implements OnInit, OnDestroy {
   }
 
   loadEvaluationActivityTypes() {
-    const pr = this.activityManager.getAllTeachingActivityTypes();
+    const pr = this.activityManager.getAllEvaluationActivityTypes();
     this.allActivityTypes = Observable.fromPromise(pr)
       .map(res => {
         return res.json();
@@ -116,7 +133,7 @@ export class EvaluationActivityComponent implements OnInit, OnDestroy {
   }
 
   loadActivityById(activityId: number): Observable<EvaluationActivity> {
-    const pr = this.activityManager.getActivityById(activityId);
+    const pr = this.activityManager.getEvaluationActivityById(activityId);
     return Observable.fromPromise(pr)
       .map(res => {
         return this.metadataUtil.serializedEvaluationActivityToMetadata(res.json());
@@ -128,6 +145,7 @@ export class EvaluationActivityComponent implements OnInit, OnDestroy {
     this.tmpActivity.subject = new Subject();
     this.tmpActivity.teacher = new Teacher();
     this.tmpActivity.location = new Location();
+    this.tmpActivity.academicYear = new AcademicYear();
   }
 
   updateChanges() {
@@ -151,8 +169,21 @@ export class EvaluationActivityComponent implements OnInit, OnDestroy {
     if (this.areDiffernt(this.participantsId, this.getParticipantsIdsFormActivity(this.currentActivity))) {
       this.changes.push({participants: this.participantsId});
     }
-
+    if (this.areDatesDiffernt(this.tmpActivity.date, this.currentActivity.date)) {
+      this.changes.push({date: this.tmpActivity.date});
+    }
+    if (this.currentActivity.subject.id !== this.tmpActivity.subject.id) {
+      this.changes.push({subject: this.tmpActivity.subject.id});
+    }
+    // console.log(this.currentActivity.date);
+    // console.log(this.tmpActivity.date);
     console.log(this.changes);
+  }
+
+  updateChangesWithDelay(delay) {
+    setTimeout(() => {
+      this.updateChanges();
+    }, delay);
   }
 
   private getParticipantsIdsFormActivity(activity: EvaluationActivity): number[] {
@@ -225,5 +256,9 @@ export class EvaluationActivityComponent implements OnInit, OnDestroy {
 
   private areDiffernt(array1, array2) {
     return (array1.sort().join('') !== array2.sort().join(''));
+  }
+
+  private areDatesDiffernt(date1, date2): boolean {
+    return !(isSameDay(date1, date2) && isSameMonth(date1, date2) && isSameYear(date1, date2));
   }
 }

@@ -10,6 +10,7 @@ import * as Ps from 'perfect-scrollbar';
 import {User} from '../security/users/user';
 import {AuthService} from '../security/auth/auth.service';
 import {UploadService} from '../security/storage/upload.service';
+import {AuthGuard} from '../security/auth/auth-guard';
 
 
 const screenfull = require('screenfull');
@@ -59,6 +60,7 @@ export class MainComponent implements OnInit, OnDestroy {
     private router: Router,
     private media: ObservableMedia,
     private auth: AuthService,
+    private guard: AuthGuard,
     private uploadService: UploadService
   ) {
     const browserLang: string = translate.getBrowserLang();

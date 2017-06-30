@@ -4,6 +4,7 @@ export interface ChildrenItems {
   state: string;
   name: string;
   type?: string;
+  icon?: string;
 }
 
 export interface Menu {
@@ -16,13 +17,16 @@ export interface Menu {
 
 const MENUITEMS = [
   {
-    state: 'users',
-    name: 'USERS',
+    state: 'admin',
+    name: 'ADMIN',
     type: 'sub',
     icon: 'group',
     children: [
-      {state: 'add', name: 'ADD_USER', icon: 'group add'},
-      {state: 'list', name: 'LIST_USERS', icon: 'list view'}
+      {state: '/admin/activities/load', name: 'LOAD_ACTIVITIES'},
+      {state: '/admin/activities/teaching/list', name: 'TEACHING_ACTIVITIES_LIST'},
+      {state: '/admin/activities/evaluation/list', name: 'EVALUATION_ACTIVITIES_LIST'},
+      {state: '/admin/user/add', name: 'ADD_USER', icon: 'group_add'},
+      {state: '/admin/users/list', name: 'LIST_USERS', icon: 'list_view'}
     ]
   },
   {
@@ -37,10 +41,10 @@ const MENUITEMS = [
     type: 'sub',
     icon: 'face',
     children: [
-      {state: 'login', name: 'LOGIN'},
-      {state: 'register', name: 'REGISTER'},
-      {state: 'forgot-password', name: 'FORGOT'},
-      {state: 'lockscreen', name: 'LOCKSCREEN'}
+      {state: '/login', name: 'LOGIN'},
+      {state: '/register', name: 'REGISTER'},
+      {state: '/forgot-password', name: 'FORGOT'},
+      {state: '/lockscreen', name: 'LOCKSCREEN'}
     ]
   }
 

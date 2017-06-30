@@ -21,6 +21,10 @@
   "USERS": "Utilizatori",
   "ADD_USER": "Adaugare utilizator",
   "LIST_USERS": "Listare utilizatori",
+  "LOAD_ACTIVITIES": "Inregistrare activitati",
+  "ADMIN": "Administrator",
+  "TEACHING_ACTIVITIES_LIST": "Listare activitati de predare",
+  "EVALUATION_ACTIVITIES_LIST": "Listare activitati de evaluare",
 
   "ACTIVITIES":"Activitati",
 
@@ -32,16 +36,17 @@
   "exam": "Examen",
   "coloquim": "Colocviu",
   "project": "Proiect",
+  "project_presentation": "Prezentare proiect",
   "at": "la",
   "with": "cu",
 
 
-  "odd-WEEK": "Saptamani impare",
-  "even-WEEK": "Saptamani pare",
+  "odd-WEEK": "Saptamanile impare",
+  "even-WEEK": "Saptamanile pare",
   "every-WEEK": "Fiecare saptamana",
 
-  "LOCATION_PLACEHOLDER": "Sala de curs",
-  "TEACHER_PLACEHOLDER": "Profesor titular",
+  "LOCATION_PLACEHOLDER": "Sala ",
+  "TEACHER_PLACEHOLDER": "Profesor ",
   "DAY_IN_WEEK_PLACEHOLDER": "Numarul zilei din saptamana",
   "HOUR_PLACEHOLDER": "Ora",
   "ACTIVITY_TYPE_PLACEHOLDER": "Tip activitate",
@@ -52,8 +57,10 @@
   "ACADEMIC_YEAR_PLACEHOLDER": "Anul universitar",
   "SUBJECT_PLACEHOLDER": "Materia",
   "EVALUATION_ACTIVITY_TYPE_PLACEHOLDER": "Tip evaluare",
+  "DATE_PLACEHOLDER": "In data",
 
   "EDIT_ACTIVITY_LABEL": "Editare activitate",
 
   "DUPLICATE_FIELDS": "Campuri duplicat"
+
 }

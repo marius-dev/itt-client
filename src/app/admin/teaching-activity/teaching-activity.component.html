@@ -83,7 +83,7 @@
         </div>
         <div fxFlex.gt-sm="30" fxFlex.gt-xs="30" fxFlex="100">
           <md-select name="academic-year" (change)="updateChanges()"
-                     placeholder="{{'ACADEMIC_YEAR_PLACEHOLDER' | translate }}" [(ngModel)]="tmpActivity.semester.academicYear"
+                     placeholder="{{'ACADEMIC_YEAR_PLACEHOLDER' | translate }}" [(ngModel)]="tmpActivity.semester.academicYear.name"
                      required="true" fxFlex="100">
             <md-option *ngFor="let academicYear of allAcademicYears | async" [value]="academicYear?.name">
               {{ academicYear?.name }}

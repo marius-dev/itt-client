@@ -126,7 +126,7 @@ export class TeachingActivityComponent implements OnInit, OnDestroy {
   }
 
   loadActivityById(activityId: number): Observable<TeachingActivity> {
-    const pr = this.activityManager.getActivityById(activityId);
+    const pr = this.activityManager.getTeachingActivityById(activityId);
     return Observable.fromPromise(pr)
       .map(res => {
         return this.metadataUtil.serializedTeachingActivityToMetadata(res.json());
@@ -174,8 +174,6 @@ export class TeachingActivityComponent implements OnInit, OnDestroy {
     if (this.currentActivity.semester.academicYear !== this.tmpActivity.semester.academicYear) {
       this.changes.push({academicYear: this.tmpActivity.semester.academicYear});
     }
-
-    console.log(this.changes);
   }
 
   private getParticipantsIdsFormActivity(activity: TeachingActivity): number[] {
@@ -246,8 +244,7 @@ export class TeachingActivityComponent implements OnInit, OnDestroy {
 
     this.activityObservable.subscribe(data => {
       this.currentActivity = data;
-      console.log('----------');
-      console.log(data);
+
       this.participantsId = this.getParticipantsIdsFormActivity(data);
     });
     this.activityObservable.subscribe(data => this.tmpActivity = data);

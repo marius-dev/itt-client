@@ -4,6 +4,9 @@
 
 export const teacherRoutes = 'api/v1/teacher';
 
+export const subjectRoute = 'api/v1/subject';
+
+
 export const participantRoute = 'api/v1/participant';
 
 export const studentRoutes = {

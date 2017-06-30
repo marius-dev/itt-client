@@ -1,0 +1,83 @@
+<div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign="space-between" fxFlex="100">
+  <div fxFlex.gt-md="30" fxFlex.gt-sm="30" fxFlex.gt-xs="100" fxFlex="100">
+    <md-card class="mat-pad-none">
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <tree-root
+          class="app-tree"
+          (onActivate)="onSelectedParticipant($event)"
+          [nodes]="nodes$ | async">
+        </tree-root>
+
+        <span fxFlex></span>
+
+        <md-input-container class="app-date-picker">
+          <input hidden name="date" mdInput [(ngModel)]="viewDate" (ngModelChange)="updateChangesWithDelay(40)"
+                 [mdDatepicker]="picker" placeholder="Choose a date">
+          <button md-suffix [mdDatepickerToggle]="picker"></button>
+        </md-input-container>
+        <md-datepicker mdTooltip="Select date!" [touchUi]="true" [startAt]="viewDate" #picker></md-datepicker>
+      </div>
+    </md-card>
+  </div>
+  <div fxFlex.gt-md="70" fxFlex.gt-sm="70" fxFlex.gt-xs="100" fxFlex="100">
+    <md-card *ngIf="participantId" class="mat-pad-none">
+
+      <ng-template #loading>
+        <div class="text-center">
+          <i class="fa fa-spin fa-spinner fa-5x"></i>
+          <br>
+          Loading events...
+        </div>
+      </ng-template>
+
+      <ng-template ngbModalContainer></ng-template>
+
+      <ng-template #modalContent let-close="close">
+        <div class="modal-header">
+          <button md-icon-button class="close header-button" (click)="close()">
+            <md-icon>close</md-icon>
+          </button>
+        </div>
+        <div class="modal-body">
+          <app-activity-details [activityDetails]="modalData?.event.meta">
+
+          </app-activity-details>
+        </div>
+      </ng-template>
+
+      <app-calendar-header
+        [(view)]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="fetchEvents()"
+        (viewChange)="fetchEvents()">
+      </app-calendar-header>
+
+      <div *ngIf="events$ | async; else loading; let events">
+        <div [ngSwitch]="view">
+
+          <mwl-calendar-week-view
+            *ngSwitchCase="'week'"
+            [viewDate]="viewDate"
+            [events]="events"
+            [locale]="getCurrntLang"
+            [refresh]="refresh"
+            [weekStartsOn]="weekStartsOn"
+            (eventClicked)="handleEvent('Clicked', $event.event)"
+            (dayHeaderClicked)="goToDay($event)">
+          </mwl-calendar-week-view>
+          <mwl-calendar-day-view
+            *ngSwitchCase="'day'"
+            [viewDate]="viewDate"
+            [events]="events"
+            [locale]="getCurrntLang"
+            [dayStartHour]="8"
+            [dayEndHour]="20"
+            [refresh]="refresh"
+            (eventClicked)="handleEvent('Clicked', $event.event)">
+          </mwl-calendar-day-view>
+
+        </div>
+      </div>
+    </md-card>
+  </div>
+</div>

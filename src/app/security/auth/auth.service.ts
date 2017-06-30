@@ -14,6 +14,10 @@ export class AuthService {
   constructor(private afAuth: AngularFireAuth,
               private userService: UserService) {
 
+    this.loadCurrentUser();
+  }
+
+  loadCurrentUser() {
     this.afAuth.authState.subscribe((auth) => {
       this.authState = auth;
     });
@@ -28,6 +32,7 @@ export class AuthService {
     if (this.authenticated === true) {
       return this.userService.getUser(this.currentUserId);
     } else {
+      this.loadCurrentUser();
       return Observable.of(null);
     }
   }

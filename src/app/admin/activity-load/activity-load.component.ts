@@ -6,6 +6,7 @@ import {Observable} from 'rxjs/Observable';
 import {Http} from '@angular/http';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DuplicateTeachingActivityComponent} from '../error-views/duplicate-teaching-activity-component/duplicate-teaching-activity-component.component';
+import {MdSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-activity-load',
@@ -14,6 +15,8 @@ import {DuplicateTeachingActivityComponent} from '../error-views/duplicate-teach
 })
 export class ActivityLoadComponent implements OnInit {
   @ViewChild('error_modal_duplicate_activities') duplicateErrorModal: TemplateRef<any>;
+  @ViewChild('error_modal_not_found_elements') notFoundedElementsErrorModal: TemplateRef<any>;
+
 
   currentTab: string;
 
@@ -28,17 +31,19 @@ export class ActivityLoadComponent implements OnInit {
   academicYearOptions: Observable<number[]>;
 
   duplicateActivities = [];
+  notFoundedElements = [];
 
   selectedSemester: number;
   selectedAcademicYear: string;
   selectedEvaluationType: string;
 
   constructor(private http: Http,
+              public snackBar: MdSnackBar,
               private modalService: NgbModal) {
     this.teachingActivityUploader = new FileUploader({});
     this.evaluationActivityUploader = new FileUploader({});
     this.semesterOptions = [1, 2];
-    this.evaluationActivityTypeOptions = ['exam','restanta'];
+    this.evaluationActivityTypeOptions = ['exam', 'restanta'];
     this.fetchAcademicYears();
   }
 
@@ -49,10 +54,28 @@ export class ActivityLoadComponent implements OnInit {
       this.modalService.open(this.duplicateErrorModal, {size: 'lg'});
     };
 
+    this.teachingActivityUploader.onErrorItem = (item: any, response: any, status: 404, headers: any) => {
+
+      const responsePath = JSON.parse(response);
+      this.notFoundedElements = JSON.parse(responsePath.error.exception[0].message);
+      this.modalService.open(this.notFoundedElementsErrorModal, {size: 'lg'});
+    };
+
+    this.teachingActivityUploader.onErrorItem = (item: any, response: any, status: 500, headers: any) => {
+      this.openSnackBar('Unexpected error');
+    };
+
     this.evaluationActivityUploader.onErrorItem = (item: any, response: any, status: 409, headers: any) => {
       const responsePath = JSON.parse(response);
       this.duplicateActivities = JSON.parse(responsePath.error.exception[0].message);
       this.modalService.open(this.duplicateErrorModal, {size: 'lg'});
+    };
+
+    this.evaluationActivityUploader.onErrorItem = (item: any, response: any, status: 404, headers: any) => {
+      const responsePath = JSON.parse(response);
+      this.notFoundedElements = JSON.parse(responsePath.error.exception[0].message);
+      console.log(this.notFoundedElements)
+      this.modalService.open(this.notFoundedElementsErrorModal, {size: 'lg'});
     };
   }
 
@@ -87,5 +110,11 @@ export class ActivityLoadComponent implements OnInit {
           return (year);
         });
       });
+  }
+
+  openSnackBar(message: string, action?: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 }

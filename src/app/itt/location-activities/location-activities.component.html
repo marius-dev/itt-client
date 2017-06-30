@@ -1,5 +1,23 @@
-<!--<md-sidenav-container class="app-container">-->
-  <md-card class="mat-pad-none">
+<div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign="space-between" fxFlex="100">
+  <md-card  fxFlex.gt-md="20" fxFlex.gt-sm="20" fxFlex.gt-xs="100" fxFlex="100">
+    <md-input-container>
+      <input name="location"
+             mdInput
+             placeholder="Locatia"
+             [mdAutocomplete]="auto"
+             [(ngModel)]="selectedLocation"
+             [formControl]="locationControl">
+    </md-input-container>
+
+    <md-autocomplete #auto="mdAutocomplete" [displayWith]="locationDisplayMethod">
+      <md-option *ngFor="let location of filteredLocations | async" [value]="location">
+        {{ location?.fullName }}
+      </md-option>
+    </md-autocomplete>
+  </md-card>
+
+
+  <md-card *ngIf="isLocationSelected" class="mat-pad-none" fxFlex.gt-md="70" fxFlex.gt-sm="70" fxFlex.gt-xs="100" fxFlex="100">
 
     <ng-template #loading>
       <div class="text-center">
@@ -58,3 +76,4 @@
       </div>
     </div>
   </md-card>
+</div>

@@ -43,11 +43,12 @@
       </div>
       <div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign="space-between center">
         <div fxFlex.gt-sm="24" fxFlex.gt-xs="24" fxFlex="100">
-          <app-date-time-picker
-            [(date)]="activityDate"
-            (dateChange)="refresh.next()"
-            placeholder="Not set">
-          </app-date-time-picker>
+          <md-input-container>
+            <input name="date" (ngModelChange)="updateChangesWithDelay(40)" mdInput [(ngModel)]="tmpActivity.date"
+                   [mdDatepicker]="picker" placeholder="Choose a date">
+            <button mdSuffix [mdDatepickerToggle]="picker"></button>
+          </md-input-container>
+          <md-datepicker [startAt]="tmpActivity.date" #picker></md-datepicker>
         </div>
         <div fxFlex.gt-sm="24" fxFlex.gt-xs="24" fxFlex="100">
           <md-input-container fxFlex="100">
@@ -63,39 +64,32 @@
           </md-input-container>
         </div>
         <div fxFlex.gt-sm="24" fxFlex.gt-xs="24" fxFlex="100">
-          <md-select name="week-type" (change)="updateChanges()" placeholder="{{'WEEK_TYPE_PLACEHOLDER' | translate }}"
-                     fxFlex="100" [(ngModel)]="tmpActivity.weekType" required="true">
-            <md-option *ngFor="let weekType of allWeekTypes" [value]="weekType">
-              {{ weekType + '-WEEK' | translate }}
-            </md-option>
-          </md-select>
-        </div>
-      </div>
-      <div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign="space-between center">
-        <div fxFlex.gt-sm="10" fxFlex.gt-xs="10" fxFlex="100">
-          <md-select name="semester" (change)="updateChanges()"
-                     placeholder="{{'SEMESTER_PLACEHOLDER' | translate }}" [(ngModel)]="tmpActivity.semester.number"
-                     required="true" fxFlex="100">
-            <md-option *ngFor="let semester of allSemesterOptions" [value]="semester">
-              {{ semester }}
-            </md-option>
-          </md-select>
-        </div>
-        <div fxFlex.gt-sm="30" fxFlex.gt-xs="30" fxFlex="100">
           <md-select name="academic-year" (change)="updateChanges()"
-                     placeholder="{{'ACADEMIC_YEAR_PLACEHOLDER' | translate }}" [(ngModel)]="tmpActivity.semester.academicYear"
+                     placeholder="{{'ACADEMIC_YEAR_PLACEHOLDER' | translate }}"
+                     [(ngModel)]="tmpActivity.academicYear.name"
                      required="true" fxFlex="100">
             <md-option *ngFor="let academicYear of allAcademicYears | async" [value]="academicYear?.name">
               {{ academicYear?.name }}
             </md-option>
           </md-select>
         </div>
+      </div>
+      <div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign="space-between center">
         <div fxFlex.gt-sm="57" fxFlex.gt-xs="57" fxFlex="100">
           <md-select multiple name="participants" (change)="updateChanges()"
                      placeholder="{{'PARTICIPANTS_PLACEHOLDER' | translate }}" [(ngModel)]="participantsId"
                      required="true" fxFlex="100">
             <md-option *ngFor="let participant of allParticipants | async" [value]="participant.id">
               {{ participant.identifier }}
+            </md-option>
+          </md-select>
+        </div>
+        <div fxFlex.gt-sm="40" fxFlex.gt-xs="40" fxFlex="100">
+          <md-select name="subject" (change)="updateChanges()"
+                     placeholder="{{'SUBJECT_PLACEHOLDER' | translate }}" [(ngModel)]="tmpActivity.subject.id"
+                     required="true" fxFlex="100">
+            <md-option *ngFor="let subject of allSubjects | async" [value]="subject?.id">
+              {{ subject?.fullName }}
             </md-option>
           </md-select>
         </div>

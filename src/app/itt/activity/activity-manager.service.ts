@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers, RequestOptions} from '@angular/http';
 import {environment} from '../../../environments/environment';
-import {activityRoutes, locationRoute, participantRoute, teacherRoutes} from '../../external-api-routes';
+import {activityRoutes, locationRoute, participantRoute, subjectRoute, teacherRoutes} from '../../external-api-routes';
 import {studentRoutes} from '../../external-api-routes';
 import {UserService} from '../../security/users/user.service';
 import {AuthService} from '../../security/auth/auth.service';
@@ -27,6 +27,7 @@ import {
 import {TranslateService} from 'ng2-translate';
 import {MetadataUtilService} from '../metadada-util.service';
 import {throttle} from 'rxjs/operator/throttle';
+import {Router} from '@angular/router';
 
 
 @Injectable()
@@ -36,14 +37,20 @@ export class ActivityManagerService {
 
   constructor(private http: Http,
               private authService: AuthService,
+              private router: Router,
               private metadataUtil: MetadataUtilService,
               private translate: TranslateService) {
-    this.authService.currentUser().subscribe(user => {
-      this.user = user;
-    });
+    this.loadCurrentUser();
 
     const browserLang: string = translate.getBrowserLang();
     translate.use(browserLang.match(/en|ro/) ? browserLang : 'en');
+  }
+
+
+  loadCurrentUser() {
+    this.authService.currentUser().subscribe(user => {
+      this.user = user;
+    });
   }
 
   private handleError(error: any): Promise<any> {
@@ -74,6 +81,20 @@ export class ActivityManagerService {
 
     return this.http
       .get(environment.coreIttUrl + '/' + teacherRoutes + '/', options)
+      .toPromise()
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  public getAllSubjects() {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const options = new RequestOptions({headers: headers});
+
+    return this.http
+      .get(environment.coreIttUrl + '/' + subjectRoute + '/', options)
       .toPromise()
       .catch(err => {
         return this.handleError(err);
@@ -145,27 +166,105 @@ export class ActivityManagerService {
       .put(environment.coreIttUrl + '/' + activityRoutes.teachingActivityApi + '/' + activityId, JSON.stringify(changes), options);
   }
 
-  public getActivitiesOnDate(date: Date): Promise<any> {
+  public getActivitiesForCurrentUserOnDate(date: Date): Promise<any> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
     const options = new RequestOptions({headers: headers});
 
+
+    if (this.user === null) {
+      this.router.navigateByUrl('/login');
+      this.loadCurrentUser();
+      this.sleep(1000);
+    }
+
+    if (this.user.role.name === 'student') {
+
+      return this.http
+        .post(environment.coreIttUrl + '/' + studentRoutes.rootApi + '/email', JSON.stringify({email: this.user.profile.email}), options)
+        .toPromise()
+        .then(
+          res => {
+            const student = res.json();
+            return this.getActivitiesForStudentOnDate(student.id, date);
+          }
+        )
+        .catch(err => {
+          return this.handleError(err);
+        });
+    }
+
+    if (this.user.role.name === 'teacher') {
+      return this.http
+        .post(environment.coreIttUrl + '/' + teacherRoutes + '/email', JSON.stringify({email: this.user.profile.email}), options)
+        .toPromise()
+        .then(
+          res => {
+            const teacher = res.json();
+            return this.getActivitiesForTeacherOnDate(teacher.id, date);
+          }
+        )
+        .catch(err => {
+          return this.handleError(err);
+        });
+    }
+  }
+
+  getActivitiesForTeacherOnDate(teacherId: number, date: Date): Promise<any> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const options = new RequestOptions({headers: headers});
+
+    const dateAsString = format(date, 'DD-MM-YYYY');
     return this.http
-      .post(environment.coreIttUrl + '/' + studentRoutes.rootApi + '/email', JSON.stringify({email: this.user.profile.email}), options)
+      .get(environment.coreIttUrl + '/' + activityRoutes.activityApi + '/teacher/' + teacherId + '/' + dateAsString, options)
       .toPromise()
-      .then(
-        res => {
-          const student = res.json();
-          const dateAsString = format(date, 'DD-MM-YYYY');
-          return this.http
-            .get(environment.coreIttUrl + '/' + activityRoutes.activityApi + '/student/' + student.id + '/' + dateAsString, options)
-            .toPromise()
-            .catch(err => {
-              return this.handleError(err);
-            });
-        }
-      )
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  getActivitiesForStudentOnDate(studentId: number, date: Date): Promise<any> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const options = new RequestOptions({headers: headers});
+
+    const dateAsString = format(date, 'DD-MM-YYYY');
+    return this.http
+      .get(environment.coreIttUrl + '/' + activityRoutes.activityApi + '/student/' + studentId + '/' + dateAsString, options)
+      .toPromise()
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  getActivitiesForLocationOnDate(locationId, date: Date): Promise<any> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const options = new RequestOptions({headers: headers});
+
+    const dateAsString = format(date, 'DD-MM-YYYY');
+    return this.http
+      .get(environment.coreIttUrl + '/' + activityRoutes.activityApi + '/location/' + locationId + '/' + dateAsString, options)
+      .toPromise()
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  getActivitiesForParticipantOnDate(participantId, date: Date): Promise<any> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    const options = new RequestOptions({headers: headers});
+
+    const dateAsString = format(date, 'DD-MM-YYYY');
+    return this.http
+      .get(environment.coreIttUrl + '/' + activityRoutes.activityApi + '/participant/' + participantId + '/' + dateAsString, options)
+      .toPromise()
       .catch(err => {
         return this.handleError(err);
       });
@@ -180,7 +279,7 @@ export class ActivityManagerService {
     return this.http
       .get(
         environment.coreIttUrl + '/' + activityRoutes.evaluationActivityApi + '/all/' +
-        academicYear + '/' + specializationId + '/' + type ,
+        academicYear + '/' + specializationId + '/' + type,
         options
       )
       .toPromise()
@@ -207,11 +306,9 @@ export class ActivityManagerService {
       });
   }
 
-  public getAllTeachongActivitiesByAcademicYearSpecializtion(
-    academicYear: string,
-    semesterNumber: number,
-    specializationId: number
-  ): Promise<any> {
+  public getAllTeachongActivitiesByAcademicYearSpecializtion(academicYear: string,
+                                                             semesterNumber: number,
+                                                             specializationId: number): Promise<any> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
@@ -229,14 +326,28 @@ export class ActivityManagerService {
       });
   }
 
-  public getActivityById(activityId: number): Promise<any> {
+  public getTeachingActivityById(activityId: number): Promise<any> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
     const options = new RequestOptions({headers: headers});
 
     return this.http
-      .get(environment.coreIttUrl + '/' + activityRoutes.activityApi + '/' + activityId, options)
+      .get(environment.coreIttUrl + '/' + activityRoutes.teachingActivityApi + '/' + activityId, options)
+      .toPromise()
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  public getEvaluationActivityById(activityId: number): Promise<any> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const options = new RequestOptions({headers: headers});
+
+    return this.http
+      .get(environment.coreIttUrl + '/' + activityRoutes.evaluationActivityApi + '/' + activityId, options)
       .toPromise()
       .catch(err => {
         return this.handleError(err);
@@ -254,7 +365,11 @@ export class ActivityManagerService {
   }
 
   public activityToCalendarObject(serializedActivity, date: Date): CalendarEvent {
-    if (serializedActivity.activityCategory === 'practice') {
+    const examCateories = ['exam', 'project_presentation', 'coloquim', 'coloquim'];
+
+    if (examCateories.indexOf(serializedActivity.activityCategory) > -1) {
+      return this.evaluationActivityToCalendarObject(serializedActivity);
+    } else if (serializedActivity.activityCategory === 'practice') {
       return this.practiceActivityToCalendarObject(serializedActivity);
     } else {
       return this.teachingActivityToCalendarObject(serializedActivity, date);
@@ -263,15 +378,10 @@ export class ActivityManagerService {
 
   public practiceActivityToCalendarObject(serializedActivity): CalendarEvent {
 
-    console.log(serializedActivity.period.startDate);
-
     const startDate = new Date(serializedActivity.period.startDate);
     const endDate = new Date(serializedActivity.period.endDate);
 
-    console.log(startDate);
-    console.log(endDate);
-
-    const caledndarEvent = {
+    return {
       start: startDate,
       end: endDate,
       title: serializedActivity.activityName,
@@ -281,10 +391,9 @@ export class ActivityManagerService {
         afterEnd: false
       },
       draggable: false,
-      cssClass: 'event-view'
+      cssClass: 'event-view',
+      meta: serializedActivity
     };
-
-    return caledndarEvent;
   }
 
   public teachingActivityToCalendarObject(serializedActivity, date: Date): CalendarEvent {
@@ -296,6 +405,36 @@ export class ActivityManagerService {
     const endDate = addHours(startDate, serializedActivity.duration);
 
     const activity = this.metadataUtil.serializedTeachingActivityToMetadata(serializedActivity);
+
+    const caledndarEvent = {
+      start: startDate,
+      end: endDate,
+      title: '<b>' + this.translate.instant(activity.activityCategory) + '</b> ' + this.translate.instant('at') + ' <b>' +
+      activity.subject.fullName + '</b> - ' +
+      activity.teacher.name + ' ' + activity.teacher.surname + ' ',
+
+      color: this.colorByActivityType(activity.activityCategory),
+      resizable: {
+        beforeStart: false,
+        afterEnd: false
+      },
+      draggable: false,
+      cssClass: 'event-view',
+      meta: activity
+    };
+
+    return caledndarEvent;
+  }
+
+  public evaluationActivityToCalendarObject(serializedActivity): CalendarEvent {
+
+    const activity = this.metadataUtil.serializedEvaluationActivityToMetadata(serializedActivity);
+
+    const startDate = activity.date;
+
+    startDate.setHours(activity.hour);
+    const endDate = addHours(startDate, activity.duration);
+
 
     const caledndarEvent = {
       start: startDate,
@@ -317,6 +456,10 @@ export class ActivityManagerService {
     return caledndarEvent;
   }
 
+  get currentUser() {
+    return this.user;
+  }
+
   colorByActivityType(type: string) {
     switch (type) {
       case 'exam':
@@ -324,6 +467,17 @@ export class ActivityManagerService {
           primary: '#ad2121',
           secondary: '#FAE3E3'
         };
+      case 'project_presentation':
+        return {
+          primary: '#a762ad',
+          secondary: '#fad9f8'
+        };
+      case 'coloquim':
+        return {
+          primary: '#45acad',
+          secondary: '#fa2b3d'
+        };
+
       case 'course':
         return {
           primary: '#1e90ff',
@@ -339,6 +493,15 @@ export class ActivityManagerService {
           primary: '#e3bc08',
           secondary: '#FDF1BA'
         };
+    }
+  }
+
+  sleep(milliseconds) {
+    const start = new Date().getTime();
+    for (let i = 0; i < 1e7; i++) {
+      if ((new Date().getTime() - start) > milliseconds) {
+        break;
+      }
     }
   }
 }
