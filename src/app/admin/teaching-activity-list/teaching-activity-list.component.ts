@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {fadeInAnimation} from '../../core/route-animation/route.animation';
 import {Participant, Specialization, TeachingActivity} from '../../itt/calendar-metadata';
-import {MdAutocomplete} from 'md-autocomplete';
 import {Observable} from 'rxjs/Observable';
 import {Http} from '@angular/http';
 import {environment} from '../../../environments/environment';

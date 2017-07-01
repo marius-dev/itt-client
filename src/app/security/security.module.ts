@@ -25,6 +25,7 @@ import {Angular2FontawesomeModule} from 'angular2-fontawesome';
 import {AngularFireDatabase} from 'angularfire2/database';
 import {LoginViewComponent} from './session/login-view/login-view.component';
 import {LockScreenComponent} from './session/lockscreen/lockscreen.component';
+import {ForgotPasswordComponent} from './session/forgot-password/forgot-password.component';
 
 export const firebaseConfig = environment.firebaseConfig;
 

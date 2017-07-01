@@ -9,5 +9,5 @@ export const environment = {
     storageBucket: 'itt-admin.appspot.com',
     messagingSenderId: '638809028537'
   },
-  coreIttUrl: 'http://itt.mariusiliescu.me/app_dev.php'
+  coreIttUrl: 'https://mariusiliescu.me'
 };

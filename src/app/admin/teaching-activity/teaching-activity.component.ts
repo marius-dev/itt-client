@@ -19,24 +19,24 @@ import * as JQuery from 'jquery';
 export class TeachingActivityComponent implements OnInit, OnDestroy {
 
   activityId: number;
-  private urlSubscription: any;
+  urlSubscription: any;
 
   tmpActivity: TeachingActivity;
   currentActivity: TeachingActivity;
   activityObservable: Observable<TeachingActivity>;
 
-  private allSubjects: Observable<Subject[]>;
-  private allTeachers: Observable<Teacher[]>;
-  private allRooms: Observable<Location[]>;
-  private allActivityTypes: Observable<string[]>;
-  private allWeekTypes: string[];
-  private allParticipants: Observable<Participant[]>;
-  private allAcademicYears: Observable<string[]>;
-  private allSemesterOptions = [1, 2];
+  allSubjects: Observable<Subject[]>;
+  allTeachers: Observable<Teacher[]>;
+  allRooms: Observable<Location[]>;
+  allActivityTypes: Observable<string[]>;
+  allWeekTypes: string[];
+  allParticipants: Observable<Participant[]>;
+  allAcademicYears: Observable<string[]>;
+  allSemesterOptions = [1, 2];
 
   participantsId: number[];
 
-  private changes;
+  changes;
   stateCtrl: FormControl;
 
   constructor(public snackBar: MdSnackBar,

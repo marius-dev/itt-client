@@ -24,24 +24,24 @@ import {
 })
 export class EvaluationActivityComponent implements OnInit, OnDestroy {
   activityId: number;
-  private urlSubscription: any;
+  urlSubscription: any;
 
   tmpActivity: EvaluationActivity;
   currentActivity: EvaluationActivity;
   activityObservable: Observable<EvaluationActivity>;
 
-  private allSubjects: Observable<Subject[]>;
-  private allTeachers: Observable<Teacher[]>;
-  private allRooms: Observable<Location[]>;
-  private allActivityTypes: Observable<string[]>;
-  private allParticipants: Observable<Participant[]>;
-  private allAcademicYears: Observable<string[]>;
-  private evaluationActivityTypeOptions = ['exam', 'restanta'];
+  allSubjects: Observable<Subject[]>;
+  allTeachers: Observable<Teacher[]>;
+  allRooms: Observable<Location[]>;
+  allActivityTypes: Observable<string[]>;
+  allParticipants: Observable<Participant[]>;
+  allAcademicYears: Observable<string[]>;
+  evaluationActivityTypeOptions = ['exam', 'restanta'];
 
   participantsId: number[];
   asistantsId: number[];
 
-  private changes;
+  changes;
   stateCtrl: FormControl;
 
   constructor(public snackBar: MdSnackBar,

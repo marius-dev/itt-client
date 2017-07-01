@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {TranslateService} from 'ng2-translate';
 
 @Component({
   selector: 'app-calendar-header',
@@ -15,8 +16,12 @@ export class CalendarHeaderComponent implements OnInit {
 
   @Output() viewDateChange: EventEmitter<Date> = new EventEmitter();
 
-  constructor() { }
+  constructor(private translate: TranslateService) { }
 
   ngOnInit() {
+  }
+
+  get getCurrntLang() {
+    return this.translate.currentLang;
   }
 }
