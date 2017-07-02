@@ -57,6 +57,10 @@ export class ParticipantsStructureComponent implements OnInit {
     event: CalendarEvent
   };
 
+  options = {
+    dropSlotHeight: 3
+  };
+
   constructor(private modal: NgbModal,
               private translate: TranslateService,
               private metadataUtil: MetadataUtilService,

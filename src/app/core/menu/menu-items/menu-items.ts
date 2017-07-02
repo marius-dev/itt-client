@@ -5,6 +5,7 @@ export interface ChildrenItems {
   name: string;
   type?: string;
   icon?: string;
+  roles?: string[];
 }
 
 export interface Menu {
@@ -12,42 +13,38 @@ export interface Menu {
   name: string;
   type: string;
   icon: string;
+  roles?: string[];
   children?: ChildrenItems[];
 }
 
 const MENUITEMS = [
   {
-    state: 'admin',
+    state: '/admin',
     name: 'ADMIN',
     type: 'sub',
     icon: 'group',
+    roles: ['admin'],
     children: [
-      {state: '/admin/activities/load', name: 'LOAD_ACTIVITIES'},
-      {state: '/admin/activities/teaching/list', name: 'TEACHING_ACTIVITIES_LIST'},
-      {state: '/admin/activities/evaluation/list', name: 'EVALUATION_ACTIVITIES_LIST'},
-      {state: '/admin/user/add', name: 'ADD_USER', icon: 'group_add'},
-      {state: '/admin/users/list', name: 'LIST_USERS', icon: 'list_view'}
+      {state: '/admin/activities/load', name: 'LOAD_ACTIVITIES', roles: ['admin']},
+      {state: '/admin/activities/teaching/list', name: 'TEACHING_ACTIVITIES_LIST', roles: ['admin']},
+      {state: '/admin/activities/evaluation/list', name: 'EVALUATION_ACTIVITIES_LIST', roles: ['admin']},
+      {state: '/admin/user/add', name: 'ADD_USER', icon: 'group_add', roles: ['admin']},
+      {state: '/admin/users/list', name: 'LIST_USERS', icon: 'list_view', roles: ['admin']}
     ]
   },
   {
-    state: 'activities',
+    state: '/activities',
     name: 'ACTIVITIES',
     type: 'link',
-    icon: 'date_range'
+    icon: 'date_range',
+    roles: ['student', 'teacher']
   },
   {
-    state: 'session',
-    name: 'SESSIONS',
-    type: 'sub',
-    icon: 'face',
-    children: [
-      {state: '/login', name: 'LOGIN'},
-      {state: '/register', name: 'REGISTER'},
-      {state: '/forgot-password', name: 'FORGOT'},
-      {state: '/lockscreen', name: 'LOCKSCREEN'}
-    ]
+    state: '/location/activities',
+    name: 'LOCATION',
+    type: 'link',
+    icon: 'place'
   }
-
 ];
 
 @Injectable()

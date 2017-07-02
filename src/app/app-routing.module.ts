@@ -18,6 +18,7 @@ import {DatabaseViewComponent} from './admin/database-view/database-view.compone
 import {ParticipantsStructureComponent} from './itt/participants-structure/participants-structure.component';
 import {ForgotPasswordComponent} from './security/session/forgot-password/forgot-password.component';
 import {LockScreenComponent} from './security/session/lockscreen/lockscreen.component';
+import {LocationActivitiesComponent} from './itt/location-activities/location-activities.component';
 
 const appRoutes: Routes = [
   {
@@ -33,7 +34,9 @@ const appRoutes: Routes = [
     path: '',
     component: MainComponent,
     children: [
-      {path: '', component: ParticipantsStructureComponent},
+      {path: 'participant/activities', component: ParticipantsStructureComponent},
+      {path: 'location/activities', component: LocationActivitiesComponent, canActivate: [AuthGuard]},
+      {path: 'activities', component: ActivityComponent, canActivate: [AuthGuard], data: {roles: ['student', 'teacher']}},
       {path: 'db', component: DatabaseViewComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
       {path: 'admin/activities/teaching/list', component: TeachingActivityListComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
       {path: 'admin/activities/evaluation/list', component: EvaluationActivityListComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
@@ -42,7 +45,6 @@ const appRoutes: Routes = [
       {path: 'admin/activities/load', component: ActivityLoadComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
       {path: 'admin/user/add', component: UserCreateComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
       {path: 'admin/users/list', component: UserListComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
-      {path: 'activities', component: ActivityComponent, canActivate: [AuthGuard], data: {roles: ['student', 'teacher']}},
       {path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard]},
       {path: 'forbidden', component: AdminComponent},
     ]

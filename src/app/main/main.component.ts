@@ -52,17 +52,15 @@ export class MainComponent implements OnInit, OnDestroy {
 
   @ViewChild('sidenav') sidenav;
 
-  constructor(
-    public menuItems: MenuItems,
-    private breadcrumbService: BreadcrumbService,
-    private pageTitleService: PageTitleService,
-    public translate: TranslateService,
-    private router: Router,
-    private media: ObservableMedia,
-    private auth: AuthService,
-    private guard: AuthGuard,
-    private uploadService: UploadService
-  ) {
+  constructor(public menuItems: MenuItems,
+              private breadcrumbService: BreadcrumbService,
+              private pageTitleService: PageTitleService,
+              public translate: TranslateService,
+              private router: Router,
+              private media: ObservableMedia,
+              private auth: AuthService,
+              private guard: AuthGuard,
+              private uploadService: UploadService) {
     const browserLang: string = translate.getBrowserLang();
     translate.use(browserLang.match(/en|ro/) ? browserLang : 'en');
 
@@ -114,6 +112,27 @@ export class MainComponent implements OnInit, OnDestroy {
         this.sidenav.close();
       }
     });
+  }
+
+  shouldDisplay(route: string, roles: string[]) {
+
+    if (roles === undefined || roles === null || roles === []) {
+      return true;
+    }
+
+    if (!this.auth.authenticated) {
+      return false;
+    }
+
+    let response = false;
+
+    this.auth.isAuthenticated(roles)
+      .map(authenticated => {
+        response = authenticated;
+        return authenticated;
+      }).subscribe();
+
+    return response;
   }
 
   logout() {

@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         },
         // Error handling
         (err) => {
-          this.loginError = 'An error occoured during login-view, see error in console';
+          this.loginError = err.toString();
           this.tryingToLogIn = false;
         },
         // Observable Done

@@ -47,6 +47,7 @@ import {NotFoundElementsComponent} from './admin/error-views/not-found-elements/
 import { SafePipePipe } from './admin/util/safe-pipe.pipe';
 import { DatabaseViewComponent } from './admin/database-view/database-view.component';
 import {nvD3} from './core/nvD3/nvD3.component';
+import {ServiceWorkerModule} from '@angular/service-worker';
 export function createTranslateLoader(http: Http) {
   return new TranslateStaticLoader(http, 'assets/i18n', '.json');
 }
@@ -78,6 +79,7 @@ export const firebaseConfig = environment.firebaseConfig;
     nvD3
   ],
   imports: [
+    ServiceWorkerModule,
     MdAutocompleteModule,
     SortablejsModule,
     FileUploadModule,

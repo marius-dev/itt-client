@@ -171,7 +171,6 @@ export class LocationActivitiesComponent implements OnInit {
   }
 
   get getCurrntLang() {
-    console.log(this.translate.currentLang);
     return this.translate.currentLang;
   }
 
@@ -180,7 +179,6 @@ export class LocationActivitiesComponent implements OnInit {
   }
 
   goToDay($event) {
-    console.log($event);
     this.viewDate = $event.day.date;
     this.view = 'day';
   }

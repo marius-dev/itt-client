@@ -19,3 +19,22 @@
 .header-button {
   position: absolute;
 }
+
+
+.node-content-wrapper {
+  display:inline-block;
+  color:#444;
+  border:1px solid #CCC;
+  background:#DDD;
+  box-shadow: 0 0 5px -1px rgba(0,0,0,0.2);
+  cursor:pointer;
+  vertical-align:middle;
+  max-width: 100px;
+  padding: 5px;
+  border-radius: 1em;
+  text-align: center;
+}
+.node-content-wrapper:active {
+  color: rgba(0, 0, 0, 0.48);
+  box-shadow: 0 0 5px -1px rgba(0,0,0,0.6);
+}

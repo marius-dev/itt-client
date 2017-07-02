@@ -4,10 +4,10 @@
     <md-sidenav #sidenav [mode]="sidenavMode" [opened]="sidenavOpen" class="sidebar-area">
       <div class="sidebar-panel app-sidenav" fxLayout="column">
         <md-toolbar class="sidebar-logo">
-          <a class="app-logo" [routerLink]="['/']">
+          <div class="app-logo" [routerLink]="['/']">
             <div class="logo-sign inline-block"><img src="assets/img/logo-sign.png" width="30" height="30"></div>
             <div class="logo-text inline-block"><img src="assets/img/logo-text.png" width="90" height="27"></div>
-          </a>
+          </div>
         </md-toolbar>
         <div class="sidebar-container">
           <div *ngIf="data" class="app-user-thumb text-center">
@@ -21,12 +21,12 @@
             <perfect-scrollbar>
               <md-nav-list fxLayout="column" menuToggleDirective class="navigation">
                 <md-list-item menuToggleLink *ngFor="let menuitem of menuItems.getAll()" group="{{menuitem.state}}">
-                  <a menuToggle class="app-relative" md-ripple [routerLink]="['/', menuitem.state]"
-                     routerLinkActive="active-link" *ngIf="menuitem.type === 'link'">
+                  <a menuToggle class="app-relative" md-ripple [routerLink]="[menuitem.state]"
+                     routerLinkActive="active-link" *ngIf="menuitem.type === 'link' && shouldDisplay(menuitem.state,menuitem.roles)">
                     <md-icon>{{ menuitem.icon }}</md-icon>
                     <span>{{ menuitem.name | translate }}</span>
                   </a>
-                  <a menuToggle class="app-relative" md-ripple href="javascript:;" *ngIf="menuitem.type === 'sub'">
+                  <a menuToggle class="app-relative" md-ripple href="javascript:;" *ngIf="menuitem.type === 'sub' && shouldDisplay(menuitem.state,menuitem.roles)">
                     <md-icon>{{ menuitem.icon }}</md-icon>
                     <span>{{ menuitem.name | translate }}</span>
                     <span fxFlex></span>
@@ -36,7 +36,7 @@
                     <md-list-item *ngFor="let childitem of menuitem.children" routerLinkActive="open">
 
                       <a class="app-relative" [routerLink]="[childitem.state]" routerLinkActive="active-link"
-                         class="app-relative" md-ripple>
+                         class="app-relative" md-ripple *ngIf="shouldDisplay(childitem.state,childitem.roles)">
                         <md-icon *ngIf="childitem.icon">{{ childitem.icon }}</md-icon>
                         <span>{{ childitem.name | translate }}</span>
                       </a>

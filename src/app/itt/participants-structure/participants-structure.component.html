@@ -5,6 +5,7 @@
         <tree-root
           class="app-tree"
           (onActivate)="onSelectedParticipant($event)"
+          [options]="options"
           [nodes]="nodes$ | async">
         </tree-root>
 
@@ -12,7 +13,7 @@
 
         <md-input-container class="app-date-picker">
           <input hidden name="date" mdInput [(ngModel)]="viewDate" (ngModelChange)="updateChangesWithDelay(40)"
-                 [mdDatepicker]="picker" placeholder="Choose a date">
+                 [mdDatepicker]="picker">
           <button md-suffix [mdDatepickerToggle]="picker"></button>
         </md-input-container>
         <md-datepicker mdTooltip="Select date!" [touchUi]="true" [startAt]="viewDate" #picker></md-datepicker>
