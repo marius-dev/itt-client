@@ -1,9 +1,11 @@
 <div *ngIf="instanceOfTeachingActivity(activityDetails)">
   <h2><u>{{activityDetails.activityCategory | translate}}</u></h2>
   <br>
-  <p><b>{{'SUBJECT_PLACEHOLDER' | translate}}:</b> {{activityDetails.subject.fullName}}</p>
-  <p><b>{{'LOCATION_PLACEHOLDER' | translate}}:</b> {{activityDetails.location.fullName}}</p>
-  <p><b>{{'TEACHER_PLACEHOLDER' | translate}}:</b> {{activityDetails.teacher.name}} {{activityDetails.teacher.surname}}
+  <p><b>{{'SUBJECT_PLACEHOLDER' | translate}}:</b> <a [routerLink]="['/subject/activities/', activityDetails.subject.id]">{{activityDetails.subject.fullName}}</a></p>
+
+  <p><b>{{'LOCATION_PLACEHOLDER' | translate}}:</b> <a [routerLink]="['/location/activities/', activityDetails.location.id]">{{activityDetails.location.fullName}}</a></p>
+  <p><b>{{'TEACHER_PLACEHOLDER' | translate}}:</b>
+    <a [routerLink]="['/teacher/activities/', activityDetails.teacher.id]">{{activityDetails.teacher.name}} {{activityDetails.teacher.surname}}</a>
   </p>
   <p><b>{{'SEMESTER_PLACEHOLDER' | translate}}:</b> {{activityDetails.semester.number}}</p>
   <p><b>{{activityDetails.weekType + '-WEEK' | translate}}</b></p>
@@ -15,15 +17,16 @@
 </div>
 
 <div *ngIf="instanceOfEvaluationAcivity(activityDetails)">
-  <h2><u>{{activityDetails.activityCategory | translate}}</u></h2>
+  <h2> <u>{{activityDetails.activityCategory | translate}}</u></h2>
   <br>
-  <p><b>{{'SUBJECT_PLACEHOLDER' | translate}}:</b> {{activityDetails.subject.fullName}}</p>
-  <p><b>{{'LOCATION_PLACEHOLDER' | translate}}:</b> {{activityDetails.location.fullName}}</p>
-  <p><b>{{'TEACHER_PLACEHOLDER' | translate}}:</b> {{activityDetails.teacher.name}} {{activityDetails.teacher.surname}}
+  <p> <b>{{'SUBJECT_PLACEHOLDER' | translate}}:</b> <a [routerLink]="['/subject/activities/', activityDetails.subject.id]">{{activityDetails.subject.fullName}}</a></p>
+  <p> <b>{{'LOCATION_PLACEHOLDER' | translate}}:</b> <a [routerLink]="['/location/activities/', activityDetails.location.id]">{{activityDetails.location.fullName}}</a></p>
+  <p> <b>{{'TEACHER_PLACEHOLDER' | translate}}:</b>
+    <a [routerLink]="['/teacher/activities/', activityDetails.teacher.id]">{{activityDetails.teacher.name}} {{activityDetails.teacher.surname}}</a>
   </p>
-  <p><b>{{'DATE_PLACEHOLDER' | translate}}:</b> {{activityDetails.date | date: 'dd/MM/yyyy'}}</p>
-  <p><b>{{'HOUR_PLACEHOLDER' | translate}}:</b> {{activityDetails.hour}}</p>
-  <span><b>{{'PARTICIPANTS_PLACEHOLDER' | translate}}:</b></span>
+  <p> <b>{{'DATE_PLACEHOLDER' | translate}}:</b> {{activityDetails.date | date: 'dd/MM/yyyy'}}</p>
+  <p> <b>{{'HOUR_PLACEHOLDER' | translate}}:</b> {{activityDetails.hour}}</p>
+  <span> <b>{{'PARTICIPANTS_PLACEHOLDER' | translate}}:</b></span>
   <ul *ngFor="let participant of activityDetails.participants">
     <li>{{participant.identifier}}</li>
   </ul>

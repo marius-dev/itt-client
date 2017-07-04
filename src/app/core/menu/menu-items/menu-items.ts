@@ -33,6 +33,12 @@ const MENUITEMS = [
     ]
   },
   {
+    state: '/participant/activities',
+    name: 'PARTICIPANTS_ACTIVITIES',
+    type: 'link',
+    icon: 'bubble_chart'
+  },
+  {
     state: '/activities',
     name: 'ACTIVITIES',
     type: 'link',
@@ -41,9 +47,21 @@ const MENUITEMS = [
   },
   {
     state: '/location/activities',
-    name: 'LOCATION',
+    name: 'LOCATION_ACTIVITIES',
     type: 'link',
     icon: 'place'
+  },
+  {
+    state: '/subject/activities',
+    name: 'SUBJECT_ACTIVITIES',
+    type: 'link',
+    icon: 'assignment'
+  },
+  {
+    state: '/teacher/activities',
+    name: 'TEACHER_ACTIVITIES',
+    type: 'link',
+    icon: 'business_center'
   }
 ];
 

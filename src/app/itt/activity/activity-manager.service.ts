@@ -256,6 +256,21 @@ export class ActivityManagerService {
       });
   }
 
+  getActivitiesForSubjectOnDate(locationId, date: Date): Promise<any> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    const options = new RequestOptions({headers: headers});
+
+    const dateAsString = format(date, 'DD-MM-YYYY');
+    return this.http
+      .get(environment.coreIttUrl + '/' + activityRoutes.activityApi + '/subject/' + locationId + '/' + dateAsString, options)
+      .toPromise()
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
   getActivitiesForParticipantOnDate(participantId, date: Date): Promise<any> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');

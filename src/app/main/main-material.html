@@ -11,11 +11,11 @@
         </md-toolbar>
         <div class="sidebar-container">
           <div *ngIf="data" class="app-user-thumb text-center">
-            <img class="img-responsive img-circle" [src]="data && data.image ? data.image :  'assets/img/pro-thumb.jpg'"
+            <img class="img-responsive img-circle" [src]="data?.image"
                  width="107" height="107"
                  alt="user list image">
             <span
-              class="app-user-name app-block">{{user ? user.profile.name + ' ' + user.profile.surname : 'Guest'}}</span>
+              class="app-user-name app-block">{{user?.profile.name}} {{user?.profile.surname}}</span>
           </div>
           <div class="sidenav-scrollbar-container" fxLayout="column">
             <perfect-scrollbar>
@@ -44,12 +44,6 @@
                   </md-nav-list>
                 </md-list-item>
                 <md-divider></md-divider>
-                <md-list-item>
-                  <a (click)="addMenuItem()">
-                    <md-icon>add</md-icon>
-                    <span>Add</span>
-                  </a>
-                </md-list-item>
               </md-nav-list>
             </perfect-scrollbar>
           </div>
@@ -78,17 +72,22 @@
           <md-icon *ngIf="isFullscreen">fullscreen_exit</md-icon>
         </button>
 
-        <button class="user-button" md-button [mdMenuTriggerFor]="menu">
+        <button *ngIf="isLoggedIn | async" class="user-button" md-button [mdMenuTriggerFor]="menu">
           <div fxLayout="row" fxLayoutAlign="center center">
             <md-icon>account_circle</md-icon>
           </div>
         </button>
-        <button (click)="end.toggle()" md-icon-button class="ml-xs overflow-visible">
-          <md-icon>notifications</md-icon>
+
+        <button *ngIf="!isLoggedIn | async" [routerLink]="['/login']" class="user-button" md-button>
+          Login
         </button>
-        <button md-icon-button class="ml-xs overflow-visible" [mdMenuTriggerFor]="appsmenu">
-          <md-icon>apps</md-icon>
-        </button>
+
+        <!--<button (click)="end.toggle()" md-icon-button class="ml-xs overflow-visible">-->
+          <!--<md-icon>notifications</md-icon>-->
+        <!--</button>-->
+        <!--<button md-icon-button class="ml-xs overflow-visible" [mdMenuTriggerFor]="appsmenu">-->
+          <!--<md-icon>apps</md-icon>-->
+        <!--</button>-->
       </div>
     </md-toolbar>
     <md-sidenav #end align="end" class="chat-panel" mode="over" opened="false">
@@ -178,7 +177,7 @@
 </div>
 
 <md-menu class="user-menu" x-position="before" y-position="below" #menu="mdMenu">
-  <div *ngIf="data">
+  <div *ngIf="isLoggedIn | async">
     <a md-menu-item [routerLink]="['/profile']">
       <md-icon>account_circle</md-icon>
       <span>Profile</span>
@@ -187,12 +186,6 @@
     <a (click)="logout()" md-menu-item>
       <md-icon>exit_to_app</md-icon>
       <span>Logout</span>
-    </a>
-  </div>
-  <div *ngIf="!data">
-    <a md-menu-item [routerLink]="['/login']">
-      <md-icon>exit_to_app</md-icon>
-      <span>Login</span>
     </a>
   </div>
 </md-menu>

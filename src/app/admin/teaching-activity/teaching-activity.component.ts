@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Location, Participant, Semester, Subject, Teacher, TeachingActivity} from '../../itt/calendar-metadata';
+import {AcademicYear, Location, Participant, Semester, Subject, Teacher, TeachingActivity} from '../../itt/calendar-metadata';
 import {Http} from '@angular/http';
 import {MetadataUtilService} from '../../itt/metadada-util.service';
 import {ActivityManagerService} from '../../itt/activity/activity-manager.service';
@@ -112,7 +112,7 @@ export class TeachingActivityComponent implements OnInit, OnDestroy {
     this.allAcademicYears = Observable.fromPromise(pr)
       .map(res => {
         return res.json().map((year) => {
-          return (year);
+          return this.metadataUtil.serializedAcademicYearToMetadata(year);
         });
       });
   }
@@ -139,6 +139,7 @@ export class TeachingActivityComponent implements OnInit, OnDestroy {
     this.tmpActivity.subject = new Subject();
     this.tmpActivity.teacher = new Teacher();
     this.tmpActivity.semester = new Semester();
+    this.tmpActivity.semester.academicYear = new AcademicYear();
   }
 
   updateChanges() {

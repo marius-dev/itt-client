@@ -11,6 +11,7 @@ import {User} from '../security/users/user';
 import {AuthService} from '../security/auth/auth.service';
 import {UploadService} from '../security/storage/upload.service';
 import {AuthGuard} from '../security/auth/auth-guard';
+import {Observable} from 'rxjs/Observable';
 
 
 const screenfull = require('screenfull');
@@ -42,7 +43,8 @@ export class MainComponent implements OnInit, OnDestroy {
   isMobile: boolean = false;
   isFullscreen: boolean = false;
 
-
+  isLoggedIn: Observable<boolean>;
+  imageIsLoaded: Observable<boolean>;
   user: User;
   data: any;
   logoutSub: Subscription;
@@ -61,6 +63,8 @@ export class MainComponent implements OnInit, OnDestroy {
               private auth: AuthService,
               private guard: AuthGuard,
               private uploadService: UploadService) {
+    this.isLoggedIn = Observable.of(false);
+    this.imageIsLoaded = Observable.of(false);
     const browserLang: string = translate.getBrowserLang();
     translate.use(browserLang.match(/en|ro/) ? browserLang : 'en');
 
@@ -70,6 +74,17 @@ export class MainComponent implements OnInit, OnDestroy {
     breadcrumbService.addFriendlyNameForRoute('/forgot-password', 'Forgot');
     breadcrumbService.addFriendlyNameForRoute('/lockscreen', 'Lock Screen');
     breadcrumbService.addFriendlyNameForRoute('/profile', 'Profile');
+
+
+
+    this.currentUserSub = this.auth.currentUser().subscribe(user => {
+      this.user = user;
+      this.isLoggedIn = Observable.of(true);
+      this.uploadService.getProfileImage(user).subscribe(image => {
+        this.data = image;
+        this.imageIsLoaded = Observable.of(true);
+      });
+    });
   }
 
   ngOnInit() {
@@ -81,13 +96,6 @@ export class MainComponent implements OnInit, OnDestroy {
       this.url = event.url;
     });
 
-
-    this.currentUserSub = this.auth.currentUser().subscribe(user => {
-      this.user = user;
-      this.uploadService.getProfileImage(user).subscribe(image => {
-        this.data = image;
-      });
-    });
 
     if (this.url !== '/login' && this.url !== '/forgot-password' && this.url !== '/lockscreen') {
       const elemSidebar = <HTMLElement>document.querySelector('.sidebar-container ');

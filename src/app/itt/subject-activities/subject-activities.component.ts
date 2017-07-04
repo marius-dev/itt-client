@@ -21,21 +21,21 @@ import {
   CalendarEvent, CalendarEventTitleFormatter
 } from 'angular-calendar';
 
-import {Subject} from 'rxjs/Subject';
+import {Subject as Sub} from 'rxjs/Subject';
 import {TranslateService} from 'ng2-translate';
 import {EventTitleFormatter} from '../activity/event-formatter';
 import {ActivityManagerService} from '../activity/activity-manager.service';
-import {Location} from '../calendar-metadata';
 import {MetadataUtilService} from '../metadada-util.service';
 import {FormControl} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
+import {Subject} from '../calendar-metadata';
 
 
 @Component({
-  selector: 'app-location-activities',
+  selector: 'app-subject-activities',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './location-activities.component.html',
-  styleUrls: ['./location-activities.component.scss'],
+  templateUrl: './subject-activities.component.html',
+  styleUrls: ['./subject-activities.component.scss'],
   encapsulation: ViewEncapsulation.None,
   providers: [{
     provide: CalendarEventTitleFormatter,
@@ -43,23 +43,23 @@ import {ActivatedRoute} from '@angular/router';
   }]
 
 })
-export class LocationActivitiesComponent implements OnInit {
+export class SubjectActivitiesComponent implements OnInit {
 
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
   view: string = 'day';
   viewDate: Date = new Date(2017, 4, 22);
   lastViewDate: Date = this.viewDate;
-  refresh: Subject<any> = new Subject();
+  refresh: Sub<any> = new Sub();
   activeDayIsOpen: boolean = true;
   weekStartsOn: number = 1;
   events$: Observable<any>;
 
-  isLocationSelected = false;
-  filteredLocations: Observable<Location[]>;
-  allLocations: Observable<Location[]>;
-  selectedLocation: Location;
-  locationControl: FormControl;
+  isSubjectSelected = false;
+  filteredSubject: Observable<Subject[]>;
+  allSubjects: Observable<Subject[]>;
+  selectedSubject: Subject;
+  subjectControl: FormControl;
 
   paramId: number;
 
@@ -79,62 +79,66 @@ export class LocationActivitiesComponent implements OnInit {
     const browserLang: string = translate.getBrowserLang();
     translate.use(browserLang.match(/en|ro/) ? browserLang : 'ro');
 
-    this.selectedLocation = new Location();
-    this.locationControl = new FormControl();
+    this.selectedSubject = new Subject();
+    this.subjectControl = new FormControl();
 
     this.urlSubscription = this.route.params.subscribe(params => {
-      this.selectedLocation.id = +params['id'];
+      this.selectedSubject.id = +params['id'];
       this.paramId = +params['id'];
     });
-
-
-    this.locationControl.valueChanges
-      .subscribe(
-        value => {
-          this.filteredLocations = this.filter(value);
-          this.updateLocation();
-        }
-      );
   }
 
-  filter(name: string): Observable<Location[]> {
-    return this.allLocations
-      .map(locations => {
-        return locations.filter(
-          (location) => new RegExp(`^${name}`, 'gi').test(location.fullName)
+  filter(name: string): Observable<Subject[]> {
+    return this.allSubjects
+      .map(subjects => {
+        return subjects.filter(
+          (subject) => new RegExp(`^${name}`, 'gi').test(subject.fullName)
         );
       });
   }
 
-  ngOnInit() { this.loadLocations(); }
+  ngOnInit() {
+    this.loadSubjects();
+
+    this.subjectControl.valueChanges
+      .subscribe(
+        value => {
+          this.selectedSubject = value;
+          this.filteredSubject = this.filter(value);
+          if (value instanceof Subject) {
+            this.updateSubject();
+          }
+        }
+      );
+  }
 
 
-  updateLocation() {
-    this.isLocationSelected = !!(this.selectedLocation instanceof Location && this.selectedLocation.id && this.selectedLocation.shortName);
+  updateSubject() {
+    this.isSubjectSelected = !!(this.selectedSubject instanceof Subject && this.selectedSubject.id && this.selectedSubject.shortName);
 
-    if (this.isLocationSelected) {
+    if (this.isSubjectSelected) {
       this.fetchEvents(false);
     }
   }
 
-  loadLocations() {
-    const pr = this.activityService.getAllLocations();
-    this.filteredLocations = Observable.fromPromise(pr)
+  loadSubjects() {
+    const pr = this.activityService.getAllSubjects();
+    this.filteredSubject = Observable.fromPromise(pr)
       .map(res => {
-        return res.json().map((location) => {
-          return this.metadataUtil.serializedLocationToMetadata(location);
+        return res.json().map((subject) => {
+          return this.metadataUtil.serializedSubjectToMetadata(subject);
         });
       });
 
-    this.allLocations = Observable.fromPromise(pr)
+    this.allSubjects = Observable.fromPromise(pr)
       .map(res => {
-        return res.json().map((location) => {
-          const locationObj = this.metadataUtil.serializedLocationToMetadata(location);
-          if (locationObj.id === this.selectedLocation.id && !isNaN(this.paramId)) {
-            this.selectedLocation = locationObj;
+        return res.json().map((subject) => {
+          const subjectObj = this.metadataUtil.serializedSubjectToMetadata(subject);
+          if (subjectObj.id === this.selectedSubject.id && !isNaN(this.paramId)) {
+            this.selectedSubject = subjectObj;
             this.paramId = parseFloat('nan');
           }
-          return locationObj;
+          return subjectObj;
         });
       });
   }
@@ -154,7 +158,7 @@ export class LocationActivitiesComponent implements OnInit {
       return;
     }
 
-    const pr = this.activityService.getActivitiesForLocationOnDate(this.selectedLocation.id, date);
+    const pr = this.activityService.getActivitiesForSubjectOnDate(this.selectedSubject.id, date);
 
     this.events$ = Observable.fromPromise(pr)
       .map(res => {
@@ -189,8 +193,8 @@ export class LocationActivitiesComponent implements OnInit {
     return this.translate.currentLang;
   }
 
-  locationDisplayMethod(location: Location): string {
-    return location ? location.fullName : '-';
+  subjectDisplayMethod(subject: Subject): string {
+    return subject ? subject.fullName : '-';
   }
 
   goToDay($event) {

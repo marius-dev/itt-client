@@ -10,13 +10,16 @@ import {CalendarModule} from 'angular-calendar';
 import {MetadataUtilService} from './metadada-util.service';
 import {CalendarHeaderComponent} from './calendar-header/calendar-header.component';
 import {LocationActivitiesComponent} from './location-activities/location-activities.component';
-import { ActivityDetailsComponent } from './activity-details/activity-details.component';
-import { TypeCheckPipe } from './type-check.pipe';
+import {ActivityDetailsComponent} from './activity-details/activity-details.component';
+import {TypeCheckPipe} from './type-check.pipe';
 import {TranslateLoader, TranslateModule} from 'ng2-translate';
 import {createTranslateLoader} from '../app.module';
 import {Http} from '@angular/http';
 import {ParticipantsStructureComponent} from './participants-structure/participants-structure.component';
 import {TreeModule} from 'angular-tree-component';
+import {RouterModule} from '@angular/router';
+import {SubjectActivitiesComponent} from './subject-activities/subject-activities.component';
+import {TeacherActivitiesComponent} from './teacher-activities/teacher-activities.component';
 
 @NgModule({
   imports: [
@@ -28,6 +31,7 @@ import {TreeModule} from 'angular-tree-component';
     FlexLayoutModule,
     Angular2FontawesomeModule,
     TreeModule,
+    RouterModule,
     CalendarModule.forRoot(),
     TranslateModule.forRoot({
       provide: TranslateLoader,
@@ -35,7 +39,16 @@ import {TreeModule} from 'angular-tree-component';
       deps: [Http]
     })
   ],
-  declarations: [ActivityComponent, CalendarHeaderComponent, LocationActivitiesComponent, ActivityDetailsComponent, TypeCheckPipe, ParticipantsStructureComponent],
+  declarations: [
+    ActivityComponent,
+    SubjectActivitiesComponent,
+    TeacherActivitiesComponent,
+    CalendarHeaderComponent,
+    LocationActivitiesComponent,
+    ActivityDetailsComponent,
+    TypeCheckPipe,
+    ParticipantsStructureComponent
+  ],
   providers: [
     MetadataUtilService
   ]
